@@ -37,13 +37,14 @@ namespace Entities.Migrations
                     b.Property<Guid?>("JobID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("JobName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("EmployeeID");
-
-                    b.HasIndex("JobID");
 
                     b.ToTable("AppEmployee", (string)null);
                 });
@@ -429,15 +430,6 @@ namespace Entities.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
-                });
-
-            modelBuilder.Entity("Entities.AppEmployee", b =>
-                {
-                    b.HasOne("Entities.AppJob", "Job")
-                        .WithMany()
-                        .HasForeignKey("JobID");
-
-                    b.Navigation("Job");
                 });
 
             modelBuilder.Entity("Entities.AppUser", b =>
