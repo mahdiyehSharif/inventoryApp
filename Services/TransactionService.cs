@@ -6,12 +6,12 @@ using InventoryApp.Services.Helpers;
 
 namespace InventoryApp.Services
 {
-    public class InventoryService : IInventoryService
+    public class TransactionService : ITransactionService
     {
         private readonly ApplicationDbContext _db;
         // private readonly List<AppProduct> _products;
 
-        public InventoryService(ApplicationDbContext ApplicationDbContext)
+        public TransactionService(ApplicationDbContext ApplicationDbContext)
         {
             _db = ApplicationDbContext;
         }

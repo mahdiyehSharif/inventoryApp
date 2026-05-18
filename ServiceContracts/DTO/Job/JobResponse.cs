@@ -1,5 +1,5 @@
 using System;
-using Entities.Job;
+using Entities;
 
 namespace InventoryApp.ServiceContracts.DTO
 {

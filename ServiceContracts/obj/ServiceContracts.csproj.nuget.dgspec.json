@@ -1,28 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\ServiceContracts\\ServiceContracts.csproj": {}
+    "D:\\ASP.dotnet core\\inventoryApp\\ServiceContracts\\ServiceContracts.csproj": {}
   },
   "projects": {
-    "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\Entities\\Entities.csproj": {
+    "D:\\ASP.dotnet core\\inventoryApp\\Entities\\Entities.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\Entities\\Entities.csproj",
+        "projectUniqueName": "D:\\ASP.dotnet core\\inventoryApp\\Entities\\Entities.csproj",
         "projectName": "Entities",
-        "projectPath": "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\Entities\\Entities.csproj",
-        "packagesPath": "C:\\Users\\sharifpour_mh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\Entities\\obj\\",
+        "projectPath": "D:\\ASP.dotnet core\\inventoryApp\\Entities\\Entities.csproj",
+        "packagesPath": "C:\\Users\\KAVOSH RAYANEH\\.nuget\\packages\\",
+        "outputPath": "D:\\ASP.dotnet core\\inventoryApp\\Entities\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\sharifpour_mh\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\KAVOSH RAYANEH\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://package-mirror.liara.ir/repository/nuget/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
@@ -59,11 +57,11 @@
             "Microsoft.EntityFrameworkCore.Design": {
               "suppressParent": "All",
               "target": "Package",
-              "version": "[10.0.8, )"
+              "version": "[10.0.9, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[10.0.8, )"
+              "version": "[10.0.9, )"
             },
             "Microsoft.Extensions.Configuration.FileExtensions": {
               "target": "Package",
@@ -368,33 +366,31 @@
         }
       }
     },
-    "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\ServiceContracts\\ServiceContracts.csproj": {
+    "D:\\ASP.dotnet core\\inventoryApp\\ServiceContracts\\ServiceContracts.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\ServiceContracts\\ServiceContracts.csproj",
+        "projectUniqueName": "D:\\ASP.dotnet core\\inventoryApp\\ServiceContracts\\ServiceContracts.csproj",
         "projectName": "ServiceContracts",
-        "projectPath": "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\ServiceContracts\\ServiceContracts.csproj",
-        "packagesPath": "C:\\Users\\sharifpour_mh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\ServiceContracts\\obj\\",
+        "projectPath": "D:\\ASP.dotnet core\\inventoryApp\\ServiceContracts\\ServiceContracts.csproj",
+        "packagesPath": "C:\\Users\\KAVOSH RAYANEH\\.nuget\\packages\\",
+        "outputPath": "D:\\ASP.dotnet core\\inventoryApp\\ServiceContracts\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\sharifpour_mh\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\KAVOSH RAYANEH\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://package-mirror.liara.ir/repository/nuget/index.json": {}
+          "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\Entities\\Entities.csproj": {
-                "projectPath": "C:\\Users\\sharifpour_mh\\Desktop\\InventoryApp\\Entities\\Entities.csproj"
+              "D:\\ASP.dotnet core\\inventoryApp\\Entities\\Entities.csproj": {
+                "projectPath": "D:\\ASP.dotnet core\\inventoryApp\\Entities\\Entities.csproj"
               }
             }
           }

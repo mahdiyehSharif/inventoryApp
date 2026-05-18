@@ -7,10 +7,12 @@ namespace InventoryApp.ServiceContracts.DTO
     {
         public Guid TransactionID { get; set; }
         public Guid? ProductID { get; set; }
+        public string? ProductName { get; set; }
         public AppEmployee? EmployeeID {get; set; }
         public TransactionType? Type { get; set; }
         public int? Amount { get; set; }
         public DateTime? Date { get; set; }
+        
 
         public override bool Equals(object? obj)
         {
@@ -34,10 +36,11 @@ namespace InventoryApp.ServiceContracts.DTO
             {
                 TransactionID = transaction.TransactionID,
                 ProductID = transaction.ProductID,      
+                ProductName = transaction.Product?.ProductName,
                 EmployeeID = transaction.Employee ,      
                 Type = transaction.Type,
                 Amount = transaction.Amount,
-                // Date = transaction.DateTime
+                Date = transaction.DateTime
 
             };
         }

@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-namespace Entities.Job;
-
-public class AppJob
+namespace Entities
+{
+    public class AppJob
 {
 
     [Key]
@@ -19,4 +19,5 @@ public class AppJob
     [StringLength(50)]
     public String? PositionName {get; set;}
 
+}
 }

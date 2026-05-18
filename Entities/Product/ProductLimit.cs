@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Entities.Job;
+using Entities;
 
 namespace Entities;
 
@@ -18,6 +18,6 @@ public class ProductLimit
     public AppJob? Job { get; set; }
 
     [ForeignKey("Employee")]
-    public Guid? EmployeeID { get; set; }
+    public int EmployeeID { get; set; }
     public AppEmployee? Employee { get; set; }
 }

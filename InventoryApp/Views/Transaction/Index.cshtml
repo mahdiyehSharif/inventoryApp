@@ -1,0 +1,101 @@
+@model IEnumerable<InventoryApp.ServiceContracts.DTO.TransactionResponse>
+
+@{
+    ViewData["Title"] = "Transactions";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>Transactions</h2>
+
+        <a asp-controller="Transaction"
+           asp-action="Create"
+           class="btn btn-success">
+            + New Transaction
+        </a>
+
+    </div>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <table class="table table-striped table-hover align-middle">
+
+                <thead class="table-dark">
+                    <tr>
+                        <th>Transaction ID</th>
+                        <th>Product ID</th>
+                        <th>Employee</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var transaction in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    @transaction.TransactionID
+                                </td>
+
+                                <td>
+                                    @transaction.ProductID
+                                </td>
+
+                                <td>
+                                    @(transaction.EmployeeID?.FName ?? "-")
+                                </td>
+
+                                <td>
+                                    @if (transaction.Type?.ToString() == "In")
+                                    {
+                                        <span class="badge bg-success">
+                                            IN
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">
+                                            OUT
+                                        </span>
+                                    }
+                                </td>
+
+                                <td>
+                                    @transaction.Amount
+                                </td>
+
+                                <td>
+                                    @(transaction.Date?.ToString("yyyy-MM-dd") ?? "-")
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center">
+                                No transactions found
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

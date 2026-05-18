@@ -14,3 +14,19 @@ C:\Users\sharifpour_mh\Desktop\InventoryApp\ServiceContracts\obj\Debug\net10.0\S
 C:\Users\sharifpour_mh\Desktop\InventoryApp\ServiceContracts\obj\Debug\net10.0\refint\ServiceContracts.dll
 C:\Users\sharifpour_mh\Desktop\InventoryApp\ServiceContracts\obj\Debug\net10.0\ServiceContracts.pdb
 C:\Users\sharifpour_mh\Desktop\InventoryApp\ServiceContracts\obj\Debug\net10.0\ref\ServiceContracts.dll
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\bin\Debug\net10.0\ServiceContracts.deps.json
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\bin\Debug\net10.0\ServiceContracts.dll
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\bin\Debug\net10.0\ServiceContracts.pdb
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\bin\Debug\net10.0\Entities.dll
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\bin\Debug\net10.0\Entities.pdb
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\ServiceContracts.csproj.AssemblyReference.cache
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\ServiceContracts.GeneratedMSBuildEditorConfig.editorconfig
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\ServiceContracts.AssemblyInfoInputs.cache
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\ServiceContracts.AssemblyInfo.cs
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\ServiceContracts.csproj.CoreCompileInputs.cache
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\ServiceContracts.sourcelink.json
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\ServiceC.04662A29.Up2Date
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\ServiceContracts.dll
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\refint\ServiceContracts.dll
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\ServiceContracts.pdb
+D:\ASP.dotnet core\inventoryApp\ServiceContracts\obj\Debug\net10.0\ref\ServiceContracts.dll

@@ -13,3 +13,18 @@ C:\Users\sharifpour_mh\Desktop\InventoryApp\Entities\obj\Debug\net10.0\refint\En
 C:\Users\sharifpour_mh\Desktop\InventoryApp\Entities\obj\Debug\net10.0\Entities.pdb
 C:\Users\sharifpour_mh\Desktop\InventoryApp\Entities\obj\Debug\net10.0\Entities.genruntimeconfig.cache
 C:\Users\sharifpour_mh\Desktop\InventoryApp\Entities\obj\Debug\net10.0\ref\Entities.dll
+D:\ASP.dotnet core\inventoryApp\Entities\bin\Debug\net10.0\Entities.deps.json
+D:\ASP.dotnet core\inventoryApp\Entities\bin\Debug\net10.0\Entities.runtimeconfig.json
+D:\ASP.dotnet core\inventoryApp\Entities\bin\Debug\net10.0\Entities.dll
+D:\ASP.dotnet core\inventoryApp\Entities\bin\Debug\net10.0\Entities.pdb
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\Entities.csproj.AssemblyReference.cache
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\Entities.GeneratedMSBuildEditorConfig.editorconfig
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\Entities.AssemblyInfoInputs.cache
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\Entities.AssemblyInfo.cs
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\Entities.csproj.CoreCompileInputs.cache
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\Entities.sourcelink.json
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\Entities.dll
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\refint\Entities.dll
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\Entities.pdb
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\Entities.genruntimeconfig.cache
+D:\ASP.dotnet core\inventoryApp\Entities\obj\Debug\net10.0\ref\Entities.dll

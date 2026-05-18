@@ -2,7 +2,7 @@ using InventoryApp.ServiceContracts.DTO;
 
 namespace InventoryApp.ServiceContracts
 {
-    public interface IInventoryService
+    public interface ITransactionService
     {
         public TransactionResponse AddTransaction(TransactionAddRequest? transactionAddRequest);
 

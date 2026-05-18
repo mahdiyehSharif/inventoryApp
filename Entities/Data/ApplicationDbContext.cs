@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Entities.Security;
-using Entities.Job;
+using Entities;
 
 namespace Entities.Data
 {

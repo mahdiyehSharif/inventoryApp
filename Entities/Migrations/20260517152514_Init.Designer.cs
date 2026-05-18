@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260622051045_Init")]
+    [Migration("20260517152514_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -20,16 +20,18 @@ namespace Entities.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.8")
+                .HasAnnotation("ProductVersion", "10.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Entities.AppEmployee", b =>
                 {
-                    b.Property<Guid>("EmployeeID")
+                    b.Property<int>("EmployeeID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmployeeID"));
 
                     b.Property<string>("FName")
                         .HasMaxLength(50)
@@ -124,8 +126,8 @@ namespace Entities.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("EmployeeID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("EmployeeID")
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50)
@@ -195,8 +197,8 @@ namespace Entities.Migrations
                     b.Property<DateTime?>("DateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("EmployeeID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("EmployeeID")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("ProductID")
                         .HasColumnType("uniqueidentifier");
@@ -270,8 +272,8 @@ namespace Entities.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("EmployeeID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("EmployeeID")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("JobID")
                         .HasColumnType("uniqueidentifier");
@@ -445,7 +447,9 @@ namespace Entities.Migrations
                 {
                     b.HasOne("Entities.AppEmployee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeID");
+                        .HasForeignKey("EmployeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Employee");
                 });
@@ -454,7 +458,9 @@ namespace Entities.Migrations
                 {
                     b.HasOne("Entities.AppEmployee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeID");
+                        .HasForeignKey("EmployeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Entities.AppProduct", "Product")
                         .WithMany("Transactions")
@@ -475,7 +481,9 @@ namespace Entities.Migrations
                 {
                     b.HasOne("Entities.AppEmployee", "Employee")
                         .WithMany()
-                        .HasForeignKey("EmployeeID");
+                        .HasForeignKey("EmployeeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Entities.Job.AppJob", "Job")
                         .WithMany()

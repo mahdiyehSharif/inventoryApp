@@ -87,7 +87,8 @@ namespace Entities.Migrations
                 name: "AppEmployee",
                 columns: table => new
                 {
-                    EmployeeID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     FName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     LName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     JobID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
@@ -154,7 +155,7 @@ namespace Entities.Migrations
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    EmployeeID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -177,7 +178,8 @@ namespace Entities.Migrations
                         name: "FK_AspNetUsers_AppEmployee_EmployeeID",
                         column: x => x.EmployeeID,
                         principalTable: "AppEmployee",
-                        principalColumn: "EmployeeID");
+                        principalColumn: "EmployeeID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -187,7 +189,7 @@ namespace Entities.Migrations
                     ProductLimitID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     JobID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    EmployeeID = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    EmployeeID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -196,7 +198,8 @@ namespace Entities.Migrations
                         name: "FK_ProductLimit_AppEmployee_EmployeeID",
                         column: x => x.EmployeeID,
                         principalTable: "AppEmployee",
-                        principalColumn: "EmployeeID");
+                        principalColumn: "EmployeeID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductLimit_AppJob_JobID",
                         column: x => x.JobID,
@@ -301,7 +304,7 @@ namespace Entities.Migrations
                     TransactionID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    EmployeeID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false),
                     Type = table.Column<int>(type: "int", nullable: true),
                     Amount = table.Column<int>(type: "int", nullable: true),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: true)
@@ -313,7 +316,8 @@ namespace Entities.Migrations
                         name: "FK_InventoryTransactions_AppEmployee_EmployeeID",
                         column: x => x.EmployeeID,
                         principalTable: "AppEmployee",
-                        principalColumn: "EmployeeID");
+                        principalColumn: "EmployeeID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_InventoryTransactions_AspNetUsers_UserID",
                         column: x => x.UserID,
