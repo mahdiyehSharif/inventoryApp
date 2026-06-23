@@ -1,0 +1,50 @@
+@model RegisterDTO
+@{
+    ViewBag.title = "Register"; 
+}
+
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+<div class="container d-flex justify-content-center align-items-center" style="height:100vh;">
+
+    <div class="card shadow p-4" style="width: 400px;">
+
+        <h3 class="text-center mb-4">Create Account</h3>
+
+        <form asp-action="Register" method="post">
+
+            <div class="mb-3">
+                <label class="form-label">Personnel Code</label>
+                <input asp-for="EmployeeID" class="form-control" />
+                <span asp-validation-for="EmployeeID" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input asp-for="Password" type="password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input asp-for="ConfirmPassword" type="password" class="form-control" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">
+                Register
+            </button>
+
+            <div class="text-center mt-3">
+                <a asp-action="Login" asp-controller="Account">Already have an account?</a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

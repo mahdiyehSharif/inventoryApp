@@ -1,0 +1,95 @@
+@using InventoryApp.ServiceContracts.DTO
+@model IEnumerable<ProductResponse>
+@{
+    ViewBag.title = "products";
+}
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Products</h2>
+
+    <a asp-action="Create" class="btn btn-primary">
+        Add Product
+    </a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+
+        <form method="get" class="row g-3 mb-3">
+
+            <div class="col-md-8">
+                <input type="text"
+                       name="searchString"
+                       class="form-control"
+                       placeholder="Search product..." />
+            </div>
+
+            <div class="col-md-4">
+                <button type="submit" class="btn btn-outline-primary w-100">
+                    Search
+                </button>
+            </div>
+
+        </form>
+
+        <table class="table table-striped table-hover align-middle">
+
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Stock</th>
+                    <th width="180">Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (ProductResponse product in Model)
+                {
+                    <tr>
+
+                        <td>@product.ProductName</td>
+
+                        <td>@product.ProductCategory</td> 
+
+                        @* <td>
+                            @product.Price.ToString("N2")
+                        </td> *@
+
+                        <td>
+                            @product.Quantity
+                        </td> 
+
+                        <td>
+
+                            <a asp-action="Details"
+                               asp-route-id="@product.ProductID"
+                               class="btn btn-sm btn-info">
+                                Details
+                            </a>
+
+                            <a asp-action="Edit"
+                               asp-route-id="@product.ProductID"
+                               class="btn btn-sm btn-warning">
+                                Edit
+                            </a>
+
+                            <a asp-action="Delete"
+                               asp-route-id="@product.ProductID"
+                               class="btn btn-sm btn-danger">
+                                Delete
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+</div>

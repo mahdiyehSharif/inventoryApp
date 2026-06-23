@@ -1,0 +1,105 @@
+@model ServiceContracts.DTO.Auth.LoginRequest
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Login - InventoryApp</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+
+<body class="bg-light">
+
+    <div class="container">
+
+        <div class="row vh-100 justify-content-center align-items-center">
+
+            <div class="col-md-4">
+
+                <div class="card shadow border-0">
+
+                    <div class="card-body p-4">
+
+                        <h2 class="text-center mb-4">
+                            Inventory App
+                        </h2>
+
+                        <form asp-action="Login" method="post">
+
+                            <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                            <!-- EmployeeID -->
+                            <div class="mb-3">
+
+                                <label class="form-label">
+                                    Employee ID
+                                </label>
+
+                                <input asp-for="EmployeeID"
+                                       class="form-control"
+                                       placeholder="Enter your Employee ID" />
+
+                            </div>
+
+                            <!-- Password -->
+                            <div class="mb-3">
+
+                                <label class="form-label">
+                                    Password
+                                </label>
+
+                                <input asp-for="Password"
+                                       type="password"
+                                       class="form-control"
+                                       placeholder="Enter your password" />
+
+                            </div>
+
+                            <div class="form-check mb-3">
+
+                                <input asp-for="RememberMe" class="form-check-input" />
+
+                                <label class="form-check-label">
+                                    Remember Me
+                                </label>
+
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100">
+                                Login
+                            </button>
+
+                        </form>
+
+                        <hr />
+
+                        <div class="text-center">
+
+                            <a asp-action="Register" asp-controller="Account">
+                                Create Account
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+</body>
+
+</html>
