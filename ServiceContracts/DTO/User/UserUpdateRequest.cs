@@ -11,7 +11,7 @@ namespace ServiceContracts.DTO
         public string? UserName { get; set; }
 
         [Required(ErrorMessage = "EmplyeeID can't be blank.")]
-        public int EmplyeeID { get; set; }
+        public int EmployeeID { get; set; }
 
         [Required(ErrorMessage = "Please select a role.")]
         public string? Role { get; set; }

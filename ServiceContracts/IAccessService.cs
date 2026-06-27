@@ -7,16 +7,14 @@ namespace ServiceContracts
     {
         Task<List<UserResponse>> GetAllUsers();
 
-        // Task<UserResponse?> GetUser(Guid id);
+        Task<UserResponse?> GetUser(Guid userId);
 
-        // Task CreateUser(UserAddRequest request);
+        Task<bool> DeleteUser(Guid userId);
 
-        // Task DeleteUser(Guid id);
+        Task<bool> LockUser(Guid userId);
 
-        // Task ChangeRole(Guid id, string role);
-
-        // Task LockUser(Guid id);
-
-        // Task UnlockUser(Guid id);
+        Task<bool> UnlockUser(Guid userId);
+        Task<UserResponse> UpdateUser(UserUpdateRequest request);
     }
+
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260517152514_Init")]
+    [Migration("20260627072933_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -49,6 +49,33 @@ namespace Entities.Migrations
                     b.HasIndex("JobID");
 
                     b.ToTable("AppEmployee", (string)null);
+                });
+
+            modelBuilder.Entity("Entities.AppJob", b =>
+                {
+                    b.Property<Guid>("JobID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("DeputyName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("JobName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("ManagementName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("PositionName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("JobID");
+
+                    b.ToTable("AppJob", (string)null);
                 });
 
             modelBuilder.Entity("Entities.AppProduct", b =>
@@ -218,33 +245,6 @@ namespace Entities.Migrations
                     b.HasIndex("UserID");
 
                     b.ToTable("InventoryTransactions", (string)null);
-                });
-
-            modelBuilder.Entity("Entities.Job.AppJob", b =>
-                {
-                    b.Property<Guid>("JobID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("DeputyName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("JobName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("ManagementName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("PositionName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.HasKey("JobID");
-
-                    b.ToTable("AppJob", (string)null);
                 });
 
             modelBuilder.Entity("Entities.Permission", b =>
@@ -436,7 +436,7 @@ namespace Entities.Migrations
 
             modelBuilder.Entity("Entities.AppEmployee", b =>
                 {
-                    b.HasOne("Entities.Job.AppJob", "Job")
+                    b.HasOne("Entities.AppJob", "Job")
                         .WithMany()
                         .HasForeignKey("JobID");
 
@@ -485,7 +485,7 @@ namespace Entities.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.Job.AppJob", "Job")
+                    b.HasOne("Entities.AppJob", "Job")
                         .WithMany()
                         .HasForeignKey("JobID");
 

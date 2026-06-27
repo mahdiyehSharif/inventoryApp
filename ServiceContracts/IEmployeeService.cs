@@ -1,22 +1,29 @@
-using InventoryApp.ServiceContracts.DTO.Enums;
 using InventoryApp.ServiceContracts.DTO;
+using ServiceContracts.DTO;
+using InventoryApp.ServiceContracts.DTO.Enums;
 
 namespace InventoryApp.ServiceContracts
 {
     public interface IEmployeeService
     {
-        EmployeeResponse AddEmployee(EmployeeAddRequest? employeeAddRequest);
+        Task<EmployeeResponse> AddEmployee(EmployeeAddRequest employeeAddRequest);
 
-        List<EmployeeResponse> GetAllEmployees();
+        Task<List<EmployeeResponse>> GetAllEmployees();
 
-        EmployeeResponse GetEmployeeByEmployeeID(int EmployeeID);
+        Task<EmployeeResponse?> GetEmployeeByEmployeeID(int employeeID);
 
-        List<EmployeeResponse> GetFilteredEmployees(string searchBy, string searchString);
+        Task<List<EmployeeResponse>> GetFilteredEmployees(
+            string searchBy,
+            string? searchString);
 
-        List<EmployeeResponse> GetSortedEmployees(List<EmployeeResponse> allEmployees, string sortBy, SortOrderOptions sortOrder);
+        Task<List<EmployeeResponse>> GetSortedEmployees(
+            List<EmployeeResponse> allEmployees,
+            string sortBy,
+            SortOrderOptions sortOrder);
 
-        // EmployeeResponse UpdateProduct (ProductUpdateRequest productUpdateRequest);
+        Task<EmployeeResponse?> UpdateEmployee(
+            EmployeeUpdateRequest employeeUpdateRequest);
 
-        bool DeleteEmployee (int EmployeeID);
+        Task<bool> DeleteEmployee(int employeeID);
     }
 }

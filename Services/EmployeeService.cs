@@ -1,9 +1,11 @@
 using Entities;
 using InventoryApp.ServiceContracts.DTO.Enums;
 using InventoryApp.ServiceContracts.DTO;
+using ServiceContracts.DTO;
 using InventoryApp.ServiceContracts;
 using InventoryApp.Services.Helpers;
 using Entities.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
@@ -24,115 +26,149 @@ namespace Services
         }
 
 
-        public EmployeeResponse? AddEmployee(EmployeeAddRequest? employeeAddRequest)
+        public async Task<EmployeeResponse> AddEmployee(EmployeeAddRequest employeeAddRequest)
         {
-
             if (employeeAddRequest == null)
-            {
                 throw new ArgumentNullException(nameof(employeeAddRequest));
-            }
+
             ValidationHelper.ModelValidation(employeeAddRequest);
-
-
-            if (string.IsNullOrEmpty(employeeAddRequest.FName?.ToString()))
-            {
-                throw new ArgumentException("ProductName can not be blank");
-            }
 
             AppEmployee employee = employeeAddRequest.ToEmployee();
 
-            _db.Add(employee);
-            // _db.SaveChanges();
+            _db.AppEmployees.Add(employee);
+
+            await _db.SaveChangesAsync();
 
             return ConvertEmployeeToEmployeeResponse(employee);
         }
 
-        public List<EmployeeResponse> GetAllEmployees()
+        public async Task<List<EmployeeResponse>> GetAllEmployees()
         {
-            return _db.AppEmployees.ToList()
-            .Select(p => p.ToEmployeeResponse()).ToList();
+            return await _db.AppEmployees
+                .Select(e => e.ToEmployeeResponse())
+                .ToListAsync();
         }
 
 
-        public EmployeeResponse? GetEmployeeByEmployeeID(int employeeID)
+        public async Task<EmployeeResponse?> GetEmployeeByEmployeeID(int employeeID)
         {
-            if (employeeID == null)
-                return null;
+            AppEmployee? employee =
+                await _db.AppEmployees
+                .FirstOrDefaultAsync(e => e.EmployeeID == employeeID);
 
-            AppEmployee employee = _db.AppEmployees.FirstOrDefault(e => e.EmployeeID == employeeID);
             if (employee == null)
                 return null;
 
-            // _db.SaveChanges();
             return employee.ToEmployeeResponse();
         }
 
-        public List<EmployeeResponse> GetFilteredEmployees(string searchBy, string searchString)
+        public async Task<List<EmployeeResponse>> GetFilteredEmployees(
+    string searchBy,
+    string? searchString)
         {
-            List<EmployeeResponse> allEmployees = GetAllEmployees();
-            List<EmployeeResponse> matchingEmployees = allEmployees ;
+            List<EmployeeResponse> allEmployees = await GetAllEmployees();
 
-            if (string.IsNullOrEmpty(searchBy) || string.IsNullOrEmpty(searchString))
-                return matchingEmployees;
-
-            switch (searchBy)
+            if (string.IsNullOrWhiteSpace(searchBy) ||
+                string.IsNullOrWhiteSpace(searchString))
             {
-                case nameof(AppEmployee.FName):
-                    matchingEmployees = allEmployees.Where(temp =>
-                    string.IsNullOrEmpty(temp.FName) || temp.FName.Contains(searchString, StringComparison.OrdinalIgnoreCase)).ToList();
-                    break;
-
-                case nameof(AppEmployee.LName):
-                    matchingEmployees = allEmployees.Where(temp =>
-                        temp.LName.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase)
-                    ).ToList();
-                    break;
-
-                default: matchingEmployees = allEmployees; break;
-            }
-            // _db.SaveChanges();
-            return matchingEmployees;
-        }
-
-        public List<EmployeeResponse> GetSortedEmployees(List<EmployeeResponse> allEmployees, string sortBy, SortOrderOptions sortOrder)
-        {
-            if (string.IsNullOrEmpty(sortBy))
                 return allEmployees;
+            }
 
-            List<EmployeeResponse> sortedEmployees = (sortBy, sortOrder)
-            switch
+            searchString = searchString.Trim();
+
+            return searchBy switch
             {
-                (nameof(EmployeeResponse.FName), SortOrderOptions.ASC)
-                => allEmployees.OrderBy(temp => temp.FName, StringComparer.OrdinalIgnoreCase).ToList(),
+                nameof(EmployeeResponse.FName) =>
+                    allEmployees
+                    .Where(e => !string.IsNullOrEmpty(e.FName) &&
+                                e.FName.Contains(searchString,
+                                StringComparison.OrdinalIgnoreCase))
+                    .ToList(),
 
-                (nameof(EmployeeResponse.LName), SortOrderOptions.DESC)
-                => allEmployees.OrderByDescending(temp => temp.LName, StringComparer.OrdinalIgnoreCase).ToList(),
-
-                (nameof(EmployeeResponse.Job), SortOrderOptions.ASC)
-                => allEmployees.OrderBy(temp => temp.Job.ToString()).ToList(),
+                nameof(EmployeeResponse.LName) =>
+                    allEmployees
+                    .Where(e => !string.IsNullOrEmpty(e.LName) &&
+                                e.LName.Contains(searchString,
+                                StringComparison.OrdinalIgnoreCase))
+                    .ToList(),
 
                 _ => allEmployees
             };
-            // _db.SaveChanges();
-            return sortedEmployees;
+        }
+
+        public async Task<List<EmployeeResponse>> GetSortedEmployees(
+     List<EmployeeResponse> allEmployees,
+     string sortBy,
+     SortOrderOptions sortOrder)
+        {
+            if (string.IsNullOrWhiteSpace(sortBy))
+                return allEmployees;
+
+            List<EmployeeResponse> sortedEmployees =
+                (sortBy, sortOrder) switch
+                {
+                    (nameof(EmployeeResponse.FName), SortOrderOptions.ASC) =>
+                        allEmployees
+                        .OrderBy(e => e.FName)
+                        .ToList(),
+
+                    (nameof(EmployeeResponse.FName), SortOrderOptions.DESC) =>
+                        allEmployees
+                        .OrderByDescending(e => e.FName)
+                        .ToList(),
+
+                    (nameof(EmployeeResponse.LName), SortOrderOptions.ASC) =>
+                        allEmployees
+                        .OrderBy(e => e.LName)
+                        .ToList(),
+
+                    (nameof(EmployeeResponse.LName), SortOrderOptions.DESC) =>
+                        allEmployees
+                        .OrderByDescending(e => e.LName)
+                        .ToList(),
+
+                    _ => allEmployees
+                };
+
+            return await Task.FromResult(sortedEmployees);
         }
 
 
-        public bool DeleteEmployee(int employeeID)
+        public async Task<bool> DeleteEmployee(int employeeID)
         {
-            if (employeeID == null)
-            {
-                throw new ArgumentNullException(nameof(employeeID));
-            }
+            var employee = await _db.AppEmployees
+                .FirstOrDefaultAsync(e => e.EmployeeID == employeeID);
 
-            AppEmployee? employee = _db.AppEmployees.FirstOrDefault(temp => temp.EmployeeID == employeeID);
             if (employee == null)
                 return false;
 
-            _db.AppEmployees.Remove(_db.AppEmployees.First(temp => temp.EmployeeID == employeeID));
-            _db.SaveChanges();
+            _db.AppEmployees.Remove(employee);
+
+            await _db.SaveChangesAsync();
 
             return true;
+        }
+
+        public async Task<EmployeeResponse?> UpdateEmployee(EmployeeUpdateRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            ValidationHelper.ModelValidation(request);
+
+            AppEmployee? employee = await _db.AppEmployees
+                .FirstOrDefaultAsync(e => e.EmployeeID == request.EmployeeID);
+
+            if (employee == null)
+                return null;
+
+            employee.FName = request.FName;
+            employee.LName = request.LName;
+            employee.JobID = request.JobID;
+
+            await _db.SaveChangesAsync();
+
+            return employee.ToEmployeeResponse();
         }
     }
 }

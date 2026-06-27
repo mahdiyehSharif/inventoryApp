@@ -1,0 +1,37 @@
+@model InventoryApp.ServiceContracts.DTO.EmployeeAddRequest
+
+@{
+    ViewData["Title"] = "Create Employee";
+}
+
+<h3>Create Employee</h3>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-3">
+        <label>First Name</label>
+        <input asp-for="FName" class="form-control" />
+        <span asp-validation-for="FName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Last Name</label>
+        <input asp-for="LName" class="form-control" />
+        <span asp-validation-for="LName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Job ID</label>
+        <input asp-for="JobID" class="form-control" />
+        <span asp-validation-for="JobID" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Save
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>

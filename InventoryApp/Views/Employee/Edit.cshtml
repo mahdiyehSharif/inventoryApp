@@ -1,0 +1,38 @@
+@model ServiceContracts.DTO.EmployeeUpdateRequest
+@{
+    ViewData["Title"] = "Edit Employee";
+}
+
+<h3>Edit Employee</h3>
+
+<form asp-action="Edit" method="post">
+
+    <input asp-for="EmployeeID" type="hidden" />
+
+    <div class="mb-3">
+        <label>First Name</label>
+        <input asp-for="FName" class="form-control" />
+        <span asp-validation-for="FName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Last Name</label>
+        <input asp-for="LName" class="form-control" />
+        <span asp-validation-for="LName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label>Job ID</label>
+        <input asp-for="JobID" class="form-control" />
+        <span asp-validation-for="JobID" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Update
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>

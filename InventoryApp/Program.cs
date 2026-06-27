@@ -6,6 +6,7 @@ using Entities.Security;
 using Entities;
 using Microsoft.EntityFrameworkCore;
 using InventoryApp.ServiceContracts;
+using ServiceContracts;
 using Services;
 using InventoryApp.Services;
 using Entities.Data;
@@ -71,6 +72,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<IAccessService, AccessService>();
 
 
 var app = builder.Build();

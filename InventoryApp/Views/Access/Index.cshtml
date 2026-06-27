@@ -1,0 +1,122 @@
+@model IEnumerable<ServiceContracts.DTO.UserResponse>
+
+@{
+    ViewData["Title"] = "Access Management";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2>Access Management</h2>
+
+        <a asp-controller="Account"
+           asp-action="Register"
+           class="btn btn-success">
+            + Register User
+        </a>
+
+    </div>
+
+    <div class="card shadow">
+
+        <div class="card-body">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-dark">
+
+                    <tr>
+
+                        <th>User Name</th>
+                        <th>Employee ID</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th width="260">Actions</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                @foreach (var user in Model)
+                {
+                    <tr>
+
+                        <td>@user.UserName</td>
+
+                        <td>@user.EmployeeID</td>
+
+                        <td>@user.Role</td>
+
+                        <td>
+
+                            @if(user.IsLocked)
+                            {
+                                <span class="badge bg-danger">
+                                    Locked
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success">
+                                    Active
+                                </span>
+                            }
+
+                        </td>
+
+                        <td>
+
+                            <a asp-action="Edit"
+                               asp-route-id="@user.UserID"
+                               class="btn btn-warning btn-sm">
+
+                                Edit
+
+                            </a>
+
+                            @if(user.IsLocked)
+                            {
+                                <a asp-action="Unlock"
+                                   asp-route-id="@user.UserID"
+                                   class="btn btn-primary btn-sm">
+
+                                    Unlock
+
+                                </a>
+                            }
+                            else
+                            {
+                                <a asp-action="Lock"
+                                   asp-route-id="@user.UserID"
+                                   class="btn btn-secondary btn-sm">
+
+                                    Lock
+
+                                </a>
+                            }
+
+                            <a asp-action="Delete"
+                               asp-route-id="@user.UserID"
+                               class="btn btn-danger btn-sm">
+
+                                Delete
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+                }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
