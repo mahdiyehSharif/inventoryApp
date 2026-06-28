@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using InventoryApp.ServiceContracts;
 using InventoryApp.ServiceContracts.DTO;
 using ServiceContracts.DTO;
@@ -8,11 +9,27 @@ namespace InventoryApp.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
+        private readonly IJobService _jobService;
 
-        public EmployeeController(IEmployeeService employeeService)
+        public EmployeeController(
+            IEmployeeService employeeService,
+            IJobService jobService)
         {
             _employeeService = employeeService;
+            _jobService = jobService;
         }
+
+        private async Task LoadJobsAsync()
+        {
+            var jobs = await _jobService.GetAllJobs();
+
+            ViewBag.Jobs = jobs.Select(j => new SelectListItem
+            {
+                Value = j.JobID.ToString(),
+                Text = j.JobName
+            }).ToList();
+        }
+
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -21,9 +38,11 @@ namespace InventoryApp.Controllers
             return View(employees);
         }
 
+
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            await LoadJobsAsync();
             return View();
         }
 
@@ -32,12 +51,16 @@ namespace InventoryApp.Controllers
         public async Task<IActionResult> Create(EmployeeAddRequest request)
         {
             if (!ModelState.IsValid)
+            {
+                await LoadJobsAsync();
                 return View(request);
+            }
 
             await _employeeService.AddEmployee(request);
 
             return RedirectToAction(nameof(Index));
         }
+
 
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
@@ -47,9 +70,9 @@ namespace InventoryApp.Controllers
             if (employee == null)
                 return NotFound();
 
-            var model = employee.ToEmployeeUpdateRequest();
+            await LoadJobsAsync();
 
-            return View(model);
+            return View(employee.ToEmployeeUpdateRequest());
         }
 
         [HttpPost]
@@ -57,23 +80,27 @@ namespace InventoryApp.Controllers
         public async Task<IActionResult> Edit(EmployeeUpdateRequest request)
         {
             if (!ModelState.IsValid)
+            {
+                await LoadJobsAsync();
                 return View(request);
+            }
 
-            var result = await _employeeService.UpdateEmployee(request);
+            var employee = await _employeeService.UpdateEmployee(request);
 
-            if (result == null)
+            if (employee == null)
                 return NotFound();
 
             return RedirectToAction(nameof(Index));
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _employeeService.DeleteEmployee(id);
+            bool deleted = await _employeeService.DeleteEmployee(id);
 
-            if (!result)
+            if (!deleted)
                 return NotFound();
 
             return RedirectToAction(nameof(Index));

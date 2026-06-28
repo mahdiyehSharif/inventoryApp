@@ -1,0 +1,70 @@
+@model IEnumerable<InventoryApp.ServiceContracts.DTO.JobResponse>
+
+@{
+    ViewData["Title"] = "Jobs";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+
+    <a asp-action="Create" class="btn btn-primary">
+        Add Job
+    </a>
+</div>
+
+<table class="table table-bordered table-hover align-middle">
+
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Job Name</th>
+            <th>Management</th>
+            <th>Deputy</th>
+            <th>Position</th>
+            <th width="180">Actions</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+    @foreach (var job in Model)
+    {
+        <tr>
+
+            <td>@job.JobID</td>
+            <td>@job.JobName</td>
+            <td>@job.ManagementName</td>
+            <td>@job.DeputyName</td>
+            <td>@job.PositionName</td>
+
+            <td>
+
+                <a asp-action="Edit"
+                   asp-route-id="@job.JobID"
+                   class="btn btn-warning btn-sm">
+                    Edit
+                </a>
+
+                <form asp-action="Delete"
+                      asp-route-id="@job.JobID"
+                      method="post"
+                      class="d-inline">
+
+                    @Html.AntiForgeryToken()
+
+                    <button class="btn btn-danger btn-sm"
+                            onclick="return confirm('Delete this Job?')">
+
+                        Delete
+
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+    }
+
+    </tbody>
+
+</table>

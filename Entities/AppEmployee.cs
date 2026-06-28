@@ -16,7 +16,7 @@ public class AppEmployee
     public string? LName { get; set; }
 
     [ForeignKey("Job")]
-    public Guid? JobID { get; set; }
+    public int JobID { get; set; }
     public string? JobName { get; set; }
 
 

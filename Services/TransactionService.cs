@@ -1,85 +1,201 @@
 using Entities;
 using Entities.Data;
+using InventoryApp.Entities.Enums;
 using InventoryApp.ServiceContracts;
 using InventoryApp.ServiceContracts.DTO;
 using InventoryApp.Services.Helpers;
+using Microsoft.EntityFrameworkCore;
+using ServiceContracts.DTO;
 
-namespace InventoryApp.Services
+namespace Services
 {
     public class TransactionService : ITransactionService
     {
         private readonly ApplicationDbContext _db;
-        // private readonly List<AppProduct> _products;
 
-        public TransactionService(ApplicationDbContext ApplicationDbContext)
+        public TransactionService(ApplicationDbContext db)
         {
-            _db = ApplicationDbContext;
+            _db = db;
         }
 
-
-        private TransactionResponse? ConvertTransactionToTransactionResponse(InventoryTransactions transaction)
+        private TransactionResponse ConvertToResponse(InventoryTransactions transaction)
         {
-            TransactionResponse transactionResponse = transaction.ToTransactionResponse();
-            return transactionResponse;
-
-        }
-
-
-        public TransactionResponse AddTransaction(TransactionAddRequest? transactionAddRequest)
-        {
-            if (transactionAddRequest == null)
-            {
-                throw new ArgumentNullException(nameof(transactionAddRequest));
-            }
-            ValidationHelper.ModelValidation(transactionAddRequest);
-
-
-            if (string.IsNullOrEmpty(transactionAddRequest.Type?.ToString()))
-            {
-                throw new ArgumentException("TransactionType can not be blank");
-            }
-
-            InventoryTransactions? transaction = transactionAddRequest.ToTransaction();
-            transaction.TransactionID = Guid.NewGuid();
-
-            _db.Add(transaction);
-            _db.SaveChanges();
-
-            return ConvertTransactionToTransactionResponse(transaction);
-        }
-
-        public List<TransactionResponse> GetAllTransaction()
-        {
-            return _db.InventoryTransactions.Select(t => t.ToTransactionResponse()).ToList();
-        }
-
-        public TransactionResponse GetTransactiontByTransactionID(Guid? transactionID)
-        {
-            if (transactionID == null)
-                return null;
-
-            InventoryTransactions transaction = _db.InventoryTransactions.FirstOrDefault(p => p.TransactionID == transactionID);
-            if (transaction == null)
-                return null;
             return transaction.ToTransactionResponse();
         }
 
-        public bool DeleteTransaction(Guid? transactionID)
+        private async Task<AppProduct> GetProductAsync(Guid? productId)
         {
-            if (transactionID == null)
-            {
-                throw new ArgumentNullException(nameof(transactionID));
-            }
+            var product = await _db.Products
+                .FirstOrDefaultAsync(p => p.ProductID == productId);
 
-            InventoryTransactions? transaction = _db.InventoryTransactions.FirstOrDefault(temp => temp.TransactionID == transactionID);
+            if (product == null)
+                throw new Exception("Product not found.");
+
+            return product;
+        }
+
+        private async Task ApplyTransactionAsync(InventoryTransactions transaction)
+        {
+            var product = await _db.Products
+                .FirstOrDefaultAsync(p => p.ProductID == transaction.ProductID);
+
+            if (product == null)
+                throw new Exception("Product not found.");
+
+            if (transaction.Amount == null || transaction.Amount <= 0)
+                throw new Exception("Invalid amount.");
+
+            switch (transaction.Type)
+            {
+                case TransactionType.StockIn:
+
+                    product.Quantity += transaction.Amount.Value;
+                    break;
+
+                case TransactionType.StockOut:
+
+                    if (product.Quantity < transaction.Amount.Value)
+                        throw new Exception("Insufficient stock.");
+
+                    product.Quantity -= transaction.Amount.Value;
+                    break;
+
+                default:
+                    throw new Exception("Invalid transaction type.");
+            }
+        }
+
+        private async Task RollbackTransactionAsync(InventoryTransactions transaction)
+        {
+            var product = await _db.Products
+                .FirstOrDefaultAsync(p => p.ProductID == transaction.ProductID);
+
+            if (product == null)
+                throw new Exception("Product not found.");
+
+            if (transaction.Amount == null || transaction.Amount <= 0)
+                throw new Exception("Invalid amount.");
+
+            switch (transaction.Type)
+            {
+                case TransactionType.StockIn:
+
+                    if (product.Quantity < transaction.Amount.Value)
+                        throw new Exception("Cannot rollback transaction.");
+
+                    product.Quantity -= transaction.Amount.Value;
+                    break;
+
+                case TransactionType.StockOut:
+
+                    product.Quantity += transaction.Amount.Value;
+                    break;
+
+                default:
+                    throw new Exception("Invalid transaction type.");
+            }
+        }
+
+        public async Task<TransactionResponse> AddTransaction(TransactionAddRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            ValidationHelper.ModelValidation(request);
+
+            InventoryTransactions transaction = request.ToTransaction();
+
+            transaction.TransactionID = Guid.NewGuid();
+            transaction.DateTime = DateTime.Now;
+
+            await ApplyTransactionAsync(transaction);
+
+            _db.InventoryTransactions.Add(transaction);
+
+            await _db.SaveChangesAsync();
+
+            transaction = await _db.InventoryTransactions
+                .Include(t => t.Product)
+                .Include(t => t.Employee)
+                .FirstAsync(t => t.TransactionID == transaction.TransactionID);
+
+            return ConvertToResponse(transaction);
+        }
+
+        public async Task<List<TransactionResponse>> GetAllTransactions()
+        {
+            return await _db.InventoryTransactions
+                .Include(t => t.Product)
+                .Include(t => t.Employee)
+                .Select(t => t.ToTransactionResponse())
+                .ToListAsync();
+        }
+
+        public async Task<TransactionResponse?> GetTransactionByTransactionID(Guid transactionID)
+        {
+            InventoryTransactions? transaction =
+                await _db.InventoryTransactions
+                    .Include(t => t.Product)
+                    .Include(t => t.Employee)
+                    .FirstOrDefaultAsync(t => t.TransactionID == transactionID);
+
+            if (transaction == null)
+                return null;
+
+            return ConvertToResponse(transaction);
+        }
+
+        public async Task<TransactionResponse?> UpdateTransaction(TransactionUpdateRequest request)
+        {
+            if (request == null)
+                throw new ArgumentNullException(nameof(request));
+
+            ValidationHelper.ModelValidation(request);
+
+            InventoryTransactions? transaction =
+                await _db.InventoryTransactions
+                    .FirstOrDefaultAsync(t => t.TransactionID == request.TransactionID);
+
+            if (transaction == null)
+                return null;
+
+            await RollbackTransactionAsync(transaction);
+
+            transaction.ProductID = request.ProductID;
+            transaction.UserID = request.UserID;
+            transaction.EmployeeID = request.EmployeeID;
+            transaction.Type = request.Type;
+            transaction.Amount = request.Amount;
+
+            await ApplyTransactionAsync(transaction);
+
+            await _db.SaveChangesAsync();
+
+            transaction = await _db.InventoryTransactions
+                .Include(t => t.Product)
+                .Include(t => t.Employee)
+                .FirstAsync(t => t.TransactionID == request.TransactionID);
+
+            return ConvertToResponse(transaction);
+        }
+
+        public async Task<bool> DeleteTransaction(Guid transactionID)
+        {
+            InventoryTransactions? transaction =
+                await _db.InventoryTransactions
+                    .FirstOrDefaultAsync(t => t.TransactionID == transactionID);
+
             if (transaction == null)
                 return false;
 
-            _db.InventoryTransactions.Remove(_db.InventoryTransactions.First(temp => temp.TransactionID == transactionID));    
-            _db.SaveChanges();
+
+            await RollbackTransactionAsync(transaction);
+
+            _db.InventoryTransactions.Remove(transaction);
+
+            await _db.SaveChangesAsync();
 
             return true;
         }
-
     }
 }

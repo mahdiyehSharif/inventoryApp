@@ -1,15 +1,18 @@
 using InventoryApp.ServiceContracts.DTO;
+using ServiceContracts.DTO;
+using Entities;
 
 namespace InventoryApp.ServiceContracts
 {
     public interface ITransactionService
-    {
-        public TransactionResponse AddTransaction(TransactionAddRequest? transactionAddRequest);
+{
+    Task<TransactionResponse> AddTransaction(TransactionAddRequest request);
+    Task<List<TransactionResponse>> GetAllTransactions();
 
-        public List<TransactionResponse> GetAllTransaction();
-        
-        public TransactionResponse GetTransactiontByTransactionID(Guid? transactionID);
+    Task<TransactionResponse?> GetTransactionByTransactionID(Guid transactionID);
 
-        public bool DeleteTransaction(Guid? transactionID);
-    }
+    Task<TransactionResponse?> UpdateTransaction(TransactionUpdateRequest request);
+
+    Task<bool> DeleteTransaction(Guid transactionID);
+}
 }

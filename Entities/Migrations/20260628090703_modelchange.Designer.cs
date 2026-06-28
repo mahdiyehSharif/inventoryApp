@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260518062852_FixEmployeeProblem")]
-    partial class FixEmployeeProblem
+    [Migration("20260628090703_modelchange")]
+    partial class modelchange
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -37,8 +37,8 @@ namespace Entities.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid?>("JobID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("JobID")
+                        .HasColumnType("int");
 
                     b.Property<string>("JobName")
                         .HasColumnType("nvarchar(max)");
@@ -54,9 +54,11 @@ namespace Entities.Migrations
 
             modelBuilder.Entity("Entities.AppJob", b =>
                 {
-                    b.Property<Guid>("JobID")
+                    b.Property<int>("JobID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("JobID"));
 
                     b.Property<string>("DeputyName")
                         .HasMaxLength(50)
@@ -92,6 +94,9 @@ namespace Entities.Migrations
                     b.Property<string>("ProductName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasKey("ProductID");
 
@@ -276,8 +281,8 @@ namespace Entities.Migrations
                     b.Property<int>("EmployeeID")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("JobID")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int?>("JobID")
+                        .HasColumnType("int");
 
                     b.Property<Guid?>("ProductID")
                         .HasColumnType("uniqueidentifier");

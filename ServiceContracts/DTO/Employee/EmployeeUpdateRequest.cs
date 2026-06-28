@@ -17,7 +17,7 @@ namespace ServiceContracts.DTO
         public string? LName { get; set; }
 
         [Required(ErrorMessage = "Please select a job.")]
-        public Guid? JobID { get; set; }
+        public int JobID { get; set; }
 
 
         public AppEmployee ToEmployee()

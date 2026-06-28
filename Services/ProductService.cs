@@ -4,6 +4,7 @@ using InventoryApp.ServiceContracts.DTO;
 using InventoryApp.ServiceContracts;
 using InventoryApp.Services.Helpers;
 using Entities.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Services
 {
@@ -16,7 +17,7 @@ namespace Services
         }
 
 
-        private ProductResponse? ConvertProductToProductResponse(AppProduct product)
+        private ProductResponse ConvertProductToProductResponse(AppProduct product)
         {
             ProductResponse productResponse = product.ToProductResponse();
             return productResponse;
@@ -24,7 +25,7 @@ namespace Services
         }
 
 
-        public ProductResponse? AddProduct(ProductAddRequest? productAddRequest)
+        public async Task<ProductResponse> AddProduct(ProductAddRequest? productAddRequest)
         {
 
             if (productAddRequest == null)
@@ -42,35 +43,35 @@ namespace Services
             AppProduct product = productAddRequest.ToProduct();
             product.ProductID = Guid.NewGuid();
 
-            _db.Add(product);
-            // _db.SaveChanges();
+            _db.Products.Add(product);
+            await _db.SaveChangesAsync();
 
             return ConvertProductToProductResponse(product);
         }
 
-        public List<ProductResponse> GetAllProducts()
+        public async Task<List<ProductResponse>> GetAllProducts()
         {
-            return _db.Products.ToList()
-            .Select(p => p.ToProductResponse()).ToList();
+            return await _db.Products
+               .Select(p => p.ToProductResponse())
+               .ToListAsync();
         }
 
 
-        public ProductResponse? GetProductByProductID(Guid? productID)
+        public async Task<ProductResponse?> GetProductByProductID(Guid productID)
         {
-            if (productID == null)
-                return null;
+            AppProduct? product = await _db.Products
+            .FirstOrDefaultAsync(p => p.ProductID == productID);
 
-            AppProduct product = _db.Products.FirstOrDefault(p => p.ProductID == productID);
             if (product == null)
                 return null;
 
-            // _db.SaveChanges();
             return product.ToProductResponse();
         }
 
-        public List<ProductResponse> GetFilteredProducts(string searchBy, string searchString)
+        public async Task<List<ProductResponse>> GetFilteredProducts(string searchBy, string searchString)
         {
-            List<ProductResponse> allProducts = GetAllProducts();
+            List<ProductResponse> allProducts = await GetAllProducts();
+
             List<ProductResponse> matchingProducts = allProducts;
 
             if (string.IsNullOrEmpty(searchBy) || string.IsNullOrEmpty(searchString))
@@ -95,10 +96,10 @@ namespace Services
             return matchingProducts;
         }
 
-        public List<ProductResponse> GetSortedProducts(List<ProductResponse> allProducts, string sortBy, SortOrderOptions sortOrder)
+        public Task<List<ProductResponse>> GetSortedProducts(List<ProductResponse> allProducts, string sortBy, SortOrderOptions sortOrder)
         {
             if (string.IsNullOrEmpty(sortBy))
-                return allProducts;
+                return Task.FromResult(allProducts);
 
             List<ProductResponse> sortedProducts = (sortBy, sortOrder)
             switch
@@ -117,17 +118,17 @@ namespace Services
 
                 _ => allProducts
             };
-            // _db.SaveChanges();
-            return sortedProducts;
+            return Task.FromResult(sortedProducts);
         }
 
-        public ProductResponse UpdateProduct(ProductUpdateRequest productUpdateRequest)
+        public async Task<ProductResponse?> UpdateProduct(ProductUpdateRequest productUpdateRequest)
         {
             if (productUpdateRequest == null)
                 throw new ArgumentNullException(nameof(ProductUpdateRequest));
             ValidationHelper.ModelValidation(productUpdateRequest);
 
-            AppProduct? matchingProduct = _db.Products.FirstOrDefault(temp => temp.ProductID == productUpdateRequest.ProductID);
+            AppProduct? matchingProduct = await _db.Products.FirstOrDefaultAsync(
+                         p => p.ProductID == productUpdateRequest.ProductID);
             if (matchingProduct == null)
             {
                 throw new ArgumentException("Given ProductID does not exist.");
@@ -135,25 +136,20 @@ namespace Services
 
             matchingProduct.ProductName = productUpdateRequest.ProductName;
             matchingProduct.Category = productUpdateRequest.Category;
-            // matchingProduct.Transactions = productUpdateRequest.Transactions.ToList();
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             return matchingProduct.ToProductResponse();
         }
 
-        public bool DeleteProduct(Guid? productID)
+        public async Task<bool> DeleteProduct(Guid productID)
         {
-            if (productID == null)
-            {
-                throw new ArgumentNullException(nameof(productID));
-            }
-
-            AppProduct? product = _db.Products.FirstOrDefault(temp => temp.ProductID == productID);
+            AppProduct? product = await _db.Products
+                    .FirstOrDefaultAsync(p => p.ProductID == productID);
             if (product == null)
                 return false;
 
-            _db.Products.Remove(_db.Products.First(temp => temp.ProductID == productID));
-            _db.SaveChanges();
+            _db.Products.Remove(product);
+            await _db.SaveChangesAsync();
 
             return true;
         }

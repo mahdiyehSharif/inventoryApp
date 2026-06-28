@@ -1,9 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 using Entities;
 
-namespace InventoryApp.ServiceContracts.DTO
+namespace ServiceContracts.DTO
 {
-    public class JobAddRequest
+    public class JobUpdateRequest
     {
         [Required]
         public int JobID { get; set; }
@@ -22,16 +22,17 @@ namespace InventoryApp.ServiceContracts.DTO
         [Required(ErrorMessage = "Please type a PositionName.")]
          public string? PositionName { get; set; }
 
+
         public AppJob ToJob()
         {
             return new AppJob()
-        {
-            JobID = this.JobID,
-            JobName = this?.JobName,
-            ManagementName = this?.ManagementName,
-            DeputyName = this?.DeputyName,
-            PositionName = this?.PositionName
-        };
+            {
+                JobID = JobID,
+                JobName = JobName,
+                ManagementName = ManagementName,
+                DeputyName = DeputyName,
+                PositionName = PositionName
+            };
         }
     }
 }

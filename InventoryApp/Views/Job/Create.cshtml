@@ -1,0 +1,54 @@
+@model InventoryApp.ServiceContracts.DTO.JobAddRequest
+
+@{
+    ViewData["Title"] = "Create Job";
+}
+
+
+<form asp-action="Create" method="post">
+
+    @Html.AntiForgeryToken()
+
+    <div class="mb-3">
+        <label asp-for="JobID"></label>
+        <input asp-for="JobID" class="form-control" />
+        <span asp-validation-for="JobID" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="JobName"></label>
+        <input asp-for="JobName" class="form-control" />
+        <span asp-validation-for="JobName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ManagementName"></label>
+        <input asp-for="ManagementName" class="form-control" />
+        <span asp-validation-for="ManagementName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DeputyName"></label>
+        <input asp-for="DeputyName" class="form-control" />
+        <span asp-validation-for="DeputyName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PositionName"></label>
+        <input asp-for="PositionName" class="form-control" />
+        <span asp-validation-for="PositionName" class="text-danger"></span>
+    </div>
+
+    <button class="btn btn-success">
+        Save
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+}

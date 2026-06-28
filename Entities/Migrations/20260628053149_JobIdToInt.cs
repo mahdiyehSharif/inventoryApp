@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entities.Migrations
 {
     /// <inheritdoc />
-    public partial class FixEmployeeProblem : Migration
+    public partial class JobIdToInt : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,7 @@ namespace Entities.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     LName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    JobID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    JobID = table.Column<int>(type: "int", nullable: false),
                     JobName = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -31,7 +31,8 @@ namespace Entities.Migrations
                 name: "AppJob",
                 columns: table => new
                 {
-                    JobID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     JobName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     ManagementName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DeputyName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -184,7 +185,7 @@ namespace Entities.Migrations
                 {
                     ProductLimitID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    JobID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    JobID = table.Column<int>(type: "int", nullable: true),
                     EmployeeID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

@@ -5,7 +5,7 @@ namespace Entities
 {
 
     [Key]
-    public Guid? JobID {get; set; }
+    public int JobID {get; set; }
 
     [StringLength(50)]
     public string? JobName {get; set; }

@@ -16,7 +16,7 @@ namespace InventoryApp.ServiceContracts.DTO
         public string? LName { get; set; }
 
         [Required(ErrorMessage = "Job Can not be blank.")]
-        public Guid? JobID { get; set; }
+        public int JobID { get; set; }
 
 
         public AppEmployee ToEmployee()

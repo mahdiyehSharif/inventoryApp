@@ -14,9 +14,9 @@ public class AppProduct
     [StringLength(50)]
     public ProductCategory? Category { get; set; }
 
+    public int Quantity {get; set; }
+
     public List<InventoryTransactions> Transactions { get; set; } = new List<InventoryTransactions>();
 
-    // public int Quantity =>
-        // Transactions.Where(t => t.Type == TransactionType.StockIn).Sum(t => t.Amount) 
-        // Transactions.Where(t => t.Type == TransactionType.StockOut).Sum(t => t.Amount);
+
 }

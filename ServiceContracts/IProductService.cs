@@ -5,18 +5,23 @@ namespace InventoryApp.ServiceContracts
 {
     public interface IProductService
     {
-        ProductResponse AddProduct(ProductAddRequest? productAddRequest);
+        Task<ProductResponse> AddProduct(ProductAddRequest? productAddRequest);
 
-        List<ProductResponse> GetAllProducts();
+        Task<List<ProductResponse>> GetAllProducts();
 
-        ProductResponse GetProductByProductID(Guid? ProductID);
+        Task<ProductResponse?> GetProductByProductID(Guid productID);
 
-        List<ProductResponse> GetFilteredProducts(string searchBy, string searchString);
+        Task<List<ProductResponse>> GetFilteredProducts(
+            string searchBy,
+            string? searchString);
 
-        List<ProductResponse> GetSortedProducts(List<ProductResponse> allProducts, string sortBy, SortOrderOptions sortOrder);
+        Task<List<ProductResponse>> GetSortedProducts(
+            List<ProductResponse> allProducts,
+            string sortBy,
+            SortOrderOptions sortOrder);
 
-        ProductResponse UpdateProduct (ProductUpdateRequest productUpdateRequest);
+        Task<ProductResponse?> UpdateProduct(ProductUpdateRequest productUpdateRequest);
 
-        bool DeleteProduct (Guid? productID);
+        Task<bool> DeleteProduct(Guid productID);
     }
 }

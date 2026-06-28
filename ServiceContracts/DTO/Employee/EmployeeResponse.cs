@@ -11,7 +11,7 @@ namespace InventoryApp.ServiceContracts.DTO
 
         public string? LName { get; set; }
 
-        public Guid? JobID { get; set; }
+        public int JobID { get; set; }
 
         public string? JobName { get; set; }
 
