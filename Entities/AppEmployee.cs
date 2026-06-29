@@ -17,7 +17,7 @@ public class AppEmployee
 
     [ForeignKey("Job")]
     public int JobID { get; set; }
-    public string? JobName { get; set; }
+    public AppJob? Job { get; set; }
 
 
 }

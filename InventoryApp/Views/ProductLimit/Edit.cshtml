@@ -1,0 +1,72 @@
+@model InventoryApp.ServiceContracts.DTO.ProductLimitUpdateRequest
+
+@{
+    ViewData["Title"] = "Edit Product Limit";
+}
+
+<h2>Edit Product Limit</h2>
+
+<form asp-action="Edit" method="post">
+
+    <input asp-for="ProductLimitID" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="ProductID" class="form-label"></label>
+        <select asp-for="ProductID"
+                asp-items="ViewBag.Products"
+                class="form-select">
+            <option value="">Select Product</option>
+        </select>
+        <span asp-validation-for="ProductID" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="JobID" class="form-label"></label>
+        <select asp-for="JobID"
+                asp-items="ViewBag.Jobs"
+                class="form-select">
+            <option value="">Select Job</option>
+        </select>
+        <span asp-validation-for="JobID" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MaxQuantity" class="form-label"></label>
+        <input asp-for="MaxQuantity" class="form-control" />
+        <span asp-validation-for="MaxQuantity" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PeriodValue" class="form-label"></label>
+        <input asp-for="PeriodValue" class="form-control" />
+        <span asp-validation-for="PeriodValue" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PeriodType" class="form-label"></label>
+        <select asp-for="PeriodType"
+                asp-items="Html.GetEnumSelectList<InventoryApp.Entities.Enums.PeriodType>()"
+                class="form-select">
+        </select>
+        <span asp-validation-for="PeriodType" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Save Changes
+    </button>
+
+    <a asp-action="Index" class="btn btn-secondary">
+        Cancel
+    </a>
+
+</form>
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

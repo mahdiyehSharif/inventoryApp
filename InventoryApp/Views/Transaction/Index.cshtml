@@ -1,4 +1,5 @@
 @model IEnumerable<InventoryApp.ServiceContracts.DTO.TransactionResponse>
+@using InventoryApp.ServiceContracts.DTO    
 
 @{
     ViewData["Title"] = "Transactions";
@@ -38,7 +39,7 @@
 
                     @if (Model != null && Model.Any())
                     {
-                        foreach (var transaction in Model)
+                        foreach (TransactionResponse transaction in Model)
                         {
                             <tr>
 

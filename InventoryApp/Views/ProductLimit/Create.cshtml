@@ -1,0 +1,61 @@
+@model InventoryApp.ServiceContracts.DTO.ProductLimitAddRequest
+
+@{
+    ViewData["Title"] = "Create Product Limit";
+}
+
+<h2>Create Product Limit</h2>
+
+<form asp-action="Create" method="post">
+
+    <div class="mb-3">
+        <label asp-for="ProductID"></label>
+        <select asp-for="ProductID"
+                asp-items="ViewBag.Products"
+                class="form-select">
+            <option value="">Select Product</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="JobID"></label>
+        <select asp-for="JobID"
+                asp-items="ViewBag.Jobs"
+                class="form-select">
+            <option value="">Select Job</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="MaxQuantity"></label>
+        <input asp-for="MaxQuantity" class="form-control"/>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PeriodValue"></label>
+        <input asp-for="PeriodValue" class="form-control"/>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="PeriodType"></label>
+        <select asp-for="PeriodType"
+                asp-items="Html.GetEnumSelectList<InventoryApp.Entities.Enums.PeriodType>()"
+                class="form-select">
+        </select>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input"/>
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+
+    <button class="btn btn-success">
+        Save
+    </button>
+
+    <a asp-action="Index"
+       class="btn btn-secondary">
+        Back
+    </a>
+
+</form>

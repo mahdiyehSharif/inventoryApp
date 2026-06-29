@@ -39,22 +39,28 @@ namespace Services
 
             await _db.SaveChangesAsync();
 
-            return ConvertEmployeeToEmployeeResponse(employee);
+            employee = await _db.AppEmployees
+                .Include(e => e.Job)
+                .FirstAsync(e => e.EmployeeID == employee.EmployeeID);
+
+            return employee.ToEmployeeResponse();
         }
 
         public async Task<List<EmployeeResponse>> GetAllEmployees()
         {
             return await _db.AppEmployees
-                .Select(e => e.ToEmployeeResponse())
-                .ToListAsync();
+                   .Include(e => e.Job)
+                   .Select(e => e.ToEmployeeResponse())
+                   .ToListAsync();
         }
 
 
         public async Task<EmployeeResponse?> GetEmployeeByEmployeeID(int employeeID)
         {
             AppEmployee? employee =
-                await _db.AppEmployees
-                .FirstOrDefaultAsync(e => e.EmployeeID == employeeID);
+              await _db.AppEmployees
+                   .Include(e => e.Job)
+                   .FirstOrDefaultAsync(e => e.EmployeeID == employeeID);
 
             if (employee == null)
                 return null;
@@ -167,6 +173,10 @@ namespace Services
             employee.JobID = request.JobID;
 
             await _db.SaveChangesAsync();
+
+            employee = await _db.AppEmployees
+                .Include(e => e.Job)
+                .FirstAsync(e => e.EmployeeID == request.EmployeeID);
 
             return employee.ToEmployeeResponse();
         }

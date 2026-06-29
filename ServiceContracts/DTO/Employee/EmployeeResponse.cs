@@ -57,7 +57,7 @@ namespace InventoryApp.ServiceContracts.DTO
                 FName = employee.FName,
                 LName = employee.LName,
                 JobID = employee.JobID,
-                JobName = employee.JobName
+                JobName = employee.Job.JobName
             };
         }
     }

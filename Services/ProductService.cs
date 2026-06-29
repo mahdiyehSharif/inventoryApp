@@ -92,7 +92,6 @@ namespace Services
 
                 default: matchingProducts = allProducts; break;
             }
-            // _db.SaveChanges();
             return matchingProducts;
         }
 

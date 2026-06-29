@@ -1,5 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,52 +12,53 @@
     <link rel="stylesheet" href="~/InventoryApp.styles.css" asp-append-version="true" />
 
     <style>
-        body {
-            background-color: #FFFFFF;
-        }
-        .sidebar {
-            width: 220px;
-            min-height: 100vh;
-            background: #f8f9fa;
-            border-right: 1px solid #ddd;
-            position: fixed;
-            top: 0;
-            left: 0;
-            padding-top: 20px;
-        }
+            body {
+                background-color: #FFFFFF;
+            }
 
-        .sidebar a {
-            display: block;
-            padding: 10px 15px;
-            color: #333;
-            text-decoration: none;
-        }
+            .sidebar {
+                width: 220px;
+                min-height: 100vh;
+                background: #f8f9fa;
+                border-right: 1px solid #ddd;
+                position: fixed;
+                top: 0;
+                left: 0;
+                padding-top: 20px;
+            }
 
-        .sidebar a:hover {
-            background: #e9ecef;
-        }
+            .sidebar a {
+                display: block;
+                padding: 10px 15px;
+                color: #333;
+                text-decoration: none;
+            }
 
-        .content {
-            margin-left: 220px;
-            padding: 20px;
-        }
+            .sidebar a:hover {
+                background: #e9ecef;
+            }
 
-        .topbar {
-            height: 60px;
-            background: white;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
+            .content {
+                margin-left: 220px;
+                padding: 20px;
+            }
+
+            .topbar {
+                height: 60px;
+                background: white;
+                border-bottom: 1px solid #ddd;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 20px;
+            }
     </style>
 </head>
 
 <body>
 
     @* @if (User.Identity.IsAuthenticated) *@
-@* { *@
+    @* { *@
     <div class="sidebar">
         <h5 class="text-center mb-3">Inventory</h5>
 
@@ -66,9 +68,10 @@
         <a asp-controller="Transaction" asp-action="Index">Transactions</a>
         <a asp-controller="Inventory" asp-action="Index">Inventories</a>
         <a asp-controller="Job" asp-action="Index">Jobs</a>
+        <a asp-controller="ProductLimit" asp-action="Index">Limits</a>
         <a asp-controller="Access" asp-action="Index">Access Management</a>
     </div>
-@* } *@
+    @* } *@
 
     <div class="content">
 
@@ -95,4 +98,5 @@
     @await RenderSectionAsync("Scripts", required: false)
 
 </body>
+
 </html>

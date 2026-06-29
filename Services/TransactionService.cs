@@ -33,6 +33,67 @@ namespace Services
 
             return product;
         }
+        private async Task ValidateTransactionRulesAsync(TransactionAddRequest request)
+        {
+
+            if (request.Type != TransactionType.StockOut)
+                return;
+
+            AppEmployee? employee = await _db.AppEmployees
+                .FirstOrDefaultAsync(e => e.EmployeeID == request.EmployeeID);
+
+            if (employee == null)
+                throw new Exception("Employee not found.");
+
+            ProductLimit? limit = await _db.ProductLimits
+                .FirstOrDefaultAsync(l =>
+                    l.JobID == employee.JobID &&
+                    l.ProductID == request.ProductID &&
+                    l.IsActive);
+
+            if (limit == null)
+                return;
+
+
+            DateTime fromDate = DateTime.Now;
+
+            switch (limit.PeriodType)
+            {
+                case PeriodType.Day:
+                    fromDate = DateTime.Now.AddDays(-limit.PeriodValue);
+                    break;
+
+                case PeriodType.Week:
+                    fromDate = DateTime.Now.AddDays(-(7 * limit.PeriodValue));
+                    break;
+
+                case PeriodType.Month:
+                    fromDate = DateTime.Now.AddMonths(-limit.PeriodValue);
+                    break;
+
+                case PeriodType.Year:
+                    fromDate = DateTime.Now.AddYears(-limit.PeriodValue);
+                    break;
+            }
+
+
+            int usedQuantity = await _db.InventoryTransactions
+                .Where(t =>
+                    t.EmployeeID == request.EmployeeID &&
+                    t.ProductID == request.ProductID &&
+                    t.Type == TransactionType.StockOut &&
+                    t.DateTime >= fromDate)
+                .SumAsync(t => t.Amount ?? 0);
+
+            int requestedQuantity = request.Amount ?? 0;
+
+            if (usedQuantity + requestedQuantity > limit.MaxQuantity)
+            {
+                throw new Exception(
+                    $"Limit exceeded. Employee can receive only {limit.MaxQuantity} item(s) every {limit.PeriodValue} {limit.PeriodType}(s).");
+            }
+
+        }
 
         private async Task ApplyTransactionAsync(InventoryTransactions transaction)
         {
@@ -112,6 +173,8 @@ namespace Services
 
             _db.InventoryTransactions.Add(transaction);
 
+            await ValidateTransactionRulesAsync(request);
+
             await _db.SaveChangesAsync();
 
             transaction = await _db.InventoryTransactions
@@ -127,6 +190,7 @@ namespace Services
             return await _db.InventoryTransactions
                 .Include(t => t.Product)
                 .Include(t => t.Employee)
+                .ThenInclude(e => e.Job)
                 .Select(t => t.ToTransactionResponse())
                 .ToListAsync();
         }

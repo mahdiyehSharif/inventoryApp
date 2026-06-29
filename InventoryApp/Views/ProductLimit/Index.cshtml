@@ -1,0 +1,62 @@
+@model IEnumerable<InventoryApp.ServiceContracts.DTO.ProductLimitResponse>
+
+@{
+    ViewData["Title"] = "Product Limits";
+}
+
+<h2>Product Limits</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">
+        Add Product Limit
+    </a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Job</th>
+            <th>Max Quantity</th>
+            <th>Period</th>
+            <th>Active</th>
+            <th width="180"></th>
+        </tr>
+    </thead>
+
+    <tbody>
+@foreach(var item in Model)
+{
+        <tr>
+            <td>@item.ProductName</td>
+            <td>@item.JobName</td>
+            <td>@item.MaxQuantity</td>
+            <td>@item.PeriodValue @item.PeriodType</td>
+            <td>@item.IsActive</td>
+
+            <td>
+
+                <a asp-action="Edit"
+                   asp-route-id="@item.ProductLimitID"
+                   class="btn btn-warning btn-sm">
+                    Edit
+                </a>
+
+                <form asp-action="Delete"
+                      asp-route-id="@item.ProductLimitID"
+                      method="post"
+                      style="display:inline">
+
+                    <button class="btn btn-danger btn-sm"
+                            onclick="return confirm('Delete this limit?')">
+                        Delete
+                    </button>
+
+                </form>
+
+            </td>
+
+        </tr>
+}
+    </tbody>
+</table>
