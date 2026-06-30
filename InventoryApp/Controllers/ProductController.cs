@@ -15,9 +15,9 @@ namespace InventoryApp.Controllers
 
         [HttpGet]
         [Route("product/index")]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _productService.GetAllProducts();
+            var products = await _productService.GetAllProducts();
             return View(products);
         }
 

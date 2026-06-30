@@ -76,6 +76,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJobService, JobService>();
 builder.Services.AddScoped<IAccessService, AccessService>();
 builder.Services.AddScoped<IProductLimitService, ProductLimitService>();
+builder.Services.AddScoped<IImportService, ImportService>();
 
 
 

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Entities.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260628090703_modelchange")]
-    partial class modelchange
+    [Migration("20260630105514_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,14 +40,13 @@ namespace Entities.Migrations
                     b.Property<int>("JobID")
                         .HasColumnType("int");
 
-                    b.Property<string>("JobName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LName")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("EmployeeID");
+
+                    b.HasIndex("JobID");
 
                     b.ToTable("AppEmployee", (string)null);
                 });
@@ -278,18 +277,25 @@ namespace Entities.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("EmployeeID")
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("JobID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("JobID")
+                    b.Property<int>("MaxQuantity")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ProductID")
+                    b.Property<int>("PeriodType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PeriodValue")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ProductID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ProductLimitID");
-
-                    b.HasIndex("EmployeeID");
 
                     b.HasIndex("JobID");
 
@@ -440,6 +446,17 @@ namespace Entities.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Entities.AppEmployee", b =>
+                {
+                    b.HasOne("Entities.AppJob", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Job");
+                });
+
             modelBuilder.Entity("Entities.AppUser", b =>
                 {
                     b.HasOne("Entities.AppEmployee", "Employee")
@@ -476,21 +493,17 @@ namespace Entities.Migrations
 
             modelBuilder.Entity("Entities.ProductLimit", b =>
                 {
-                    b.HasOne("Entities.AppEmployee", "Employee")
+                    b.HasOne("Entities.AppJob", "Job")
                         .WithMany()
-                        .HasForeignKey("EmployeeID")
+                        .HasForeignKey("JobID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Entities.AppJob", "Job")
-                        .WithMany()
-                        .HasForeignKey("JobID");
-
                     b.HasOne("Entities.AppProduct", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductID");
-
-                    b.Navigation("Employee");
+                        .HasForeignKey("ProductID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Job");
 

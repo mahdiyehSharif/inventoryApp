@@ -1,0 +1,87 @@
+@using ServiceContracts.DTO.Enum
+
+@{
+    ViewData["Title"] = "Import Data";
+}
+
+<div class="container mt-4">
+
+    <div class="card shadow">
+
+        <div class="card-header text-white">
+            <h4 class="mb-0 text-dark">Import Data</h4>
+        </div>
+
+        <div class="card-body">
+
+            @if (TempData["Success"] != null)
+            {
+                <div class="alert alert-success">
+                    @TempData["Success"]
+                </div>
+            }
+
+            @if (TempData["Error"] != null)
+            {
+                <div class="alert alert-danger">
+                    @Html.Raw(TempData["Error"])
+                </div>
+            }
+
+            <form asp-action="Index"
+                  asp-controller="Import"
+                  method="post"
+                  enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Import Type
+                    </label>
+
+                    <select class="form-select"
+                            name="importType">
+
+                        <option value="">-- Select --</option>
+
+                        <option value="@ImportType.EmployeeJob">
+                            Employees & Jobs
+                        </option>
+
+                        <option value="@ImportType.Product">
+                            Products
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Excel File
+                    </label>
+
+                    <input
+                        class="form-control"
+                        type="file"
+                        name="file"
+                        accept=".xlsx,.xls" />
+
+                </div>
+
+                <button class="btn btn-primary">
+
+                    Import
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

@@ -6,27 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entities.Migrations
 {
     /// <inheritdoc />
-    public partial class JobIdToInt : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "AppEmployee",
-                columns: table => new
-                {
-                    EmployeeID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    LName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    JobID = table.Column<int>(type: "int", nullable: false),
-                    JobName = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AppEmployee", x => x.EmployeeID);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AppJob",
                 columns: table => new
@@ -93,7 +77,8 @@ namespace Entities.Migrations
                 {
                     ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ProductName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Category = table.Column<int>(type: "int", maxLength: 50, nullable: true)
+                    Category = table.Column<int>(type: "int", maxLength: 50, nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -101,36 +86,23 @@ namespace Entities.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AspNetUsers",
+                name: "AppEmployee",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    EmployeeID = table.Column<int>(type: "int", nullable: false),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                    EmployeeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    LName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    JobID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.PrimaryKey("PK_AppEmployee", x => x.EmployeeID);
                     table.ForeignKey(
-                        name: "FK_AspNetUsers_AppEmployee_EmployeeID",
-                        column: x => x.EmployeeID,
-                        principalTable: "AppEmployee",
-                        principalColumn: "EmployeeID",
+                        name: "FK_AppEmployee_AppJob_JobID",
+                        column: x => x.JobID,
+                        principalTable: "AppJob",
+                        principalColumn: "JobID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -184,29 +156,62 @@ namespace Entities.Migrations
                 columns: table => new
                 {
                     ProductLimitID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    JobID = table.Column<int>(type: "int", nullable: true),
-                    EmployeeID = table.Column<int>(type: "int", nullable: false)
+                    ProductID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobID = table.Column<int>(type: "int", nullable: false),
+                    MaxQuantity = table.Column<int>(type: "int", nullable: false),
+                    PeriodValue = table.Column<int>(type: "int", nullable: false),
+                    PeriodType = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductLimit", x => x.ProductLimitID);
                     table.ForeignKey(
-                        name: "FK_ProductLimit_AppEmployee_EmployeeID",
-                        column: x => x.EmployeeID,
-                        principalTable: "AppEmployee",
-                        principalColumn: "EmployeeID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_ProductLimit_AppJob_JobID",
                         column: x => x.JobID,
                         principalTable: "AppJob",
-                        principalColumn: "JobID");
+                        principalColumn: "JobID",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ProductLimit_Products_ProductID",
                         column: x => x.ProductID,
                         principalTable: "Products",
-                        principalColumn: "ProductID");
+                        principalColumn: "ProductID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_AppEmployee_EmployeeID",
+                        column: x => x.EmployeeID,
+                        principalTable: "AppEmployee",
+                        principalColumn: "EmployeeID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -328,6 +333,11 @@ namespace Entities.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppEmployee_JobID",
+                table: "AppEmployee",
+                column: "JobID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
                 column: "RoleId");
@@ -387,11 +397,6 @@ namespace Entities.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductLimit_EmployeeID",
-                table: "ProductLimit",
-                column: "EmployeeID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProductLimit_JobID",
                 table: "ProductLimit",
                 column: "JobID");
@@ -446,9 +451,6 @@ namespace Entities.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "AppJob");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
@@ -459,6 +461,9 @@ namespace Entities.Migrations
 
             migrationBuilder.DropTable(
                 name: "AppEmployee");
+
+            migrationBuilder.DropTable(
+                name: "AppJob");
         }
     }
 }

@@ -30,11 +30,11 @@ namespace InventoryApp.Services
 
             ValidationHelper.ModelValidation(jobAddRequest);
 
-            bool exists = await _db.AppJobs
-                .AnyAsync(j => j.JobID == jobAddRequest.JobID);
+            // bool exists = await _db.AppJobs
+            //     .AnyAsync(j => j.JobID == jobAddRequest.JobID);
 
-            if (exists)
-                throw new ArgumentException("Job ID already exists.");
+            // if (exists)
+            //     throw new ArgumentException("Job ID already exists.");
 
             bool nameExists = await _db.AppJobs
                 .AnyAsync(j => j.JobName == jobAddRequest.JobName);

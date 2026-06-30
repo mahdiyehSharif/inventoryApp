@@ -180,6 +180,7 @@ namespace Services
             transaction = await _db.InventoryTransactions
                 .Include(t => t.Product)
                 .Include(t => t.Employee)
+                .ThenInclude(e => e.Job)
                 .FirstAsync(t => t.TransactionID == transaction.TransactionID);
 
             return ConvertToResponse(transaction);
@@ -201,6 +202,7 @@ namespace Services
                 await _db.InventoryTransactions
                     .Include(t => t.Product)
                     .Include(t => t.Employee)
+                    .ThenInclude(e => e.Job)
                     .FirstOrDefaultAsync(t => t.TransactionID == transactionID);
 
             if (transaction == null)
@@ -238,6 +240,7 @@ namespace Services
             transaction = await _db.InventoryTransactions
                 .Include(t => t.Product)
                 .Include(t => t.Employee)
+                .ThenInclude(e => e.Job)
                 .FirstAsync(t => t.TransactionID == request.TransactionID);
 
             return ConvertToResponse(transaction);
