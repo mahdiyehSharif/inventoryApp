@@ -6,7 +6,8 @@ namespace InventoryApp.ServiceContracts
 {
     public interface ITransactionService
 {
-    Task<TransactionResponse> AddTransaction(TransactionAddRequest request);
+    Task<TransactionResponse> AddTransaction(TransactionAddRequest request,
+    Guid userId);
     Task<List<TransactionResponse>> GetAllTransactions();
 
     Task<TransactionResponse?> GetTransactionByTransactionID(Guid transactionID);

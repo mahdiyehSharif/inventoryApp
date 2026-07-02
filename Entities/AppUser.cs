@@ -6,10 +6,10 @@ namespace Entities
 {
     public class AppUser : IdentityUser<Guid>
     {
-        [StringLength(50)]
+        [MaxLength]
         public string? FirstName { get; set; }
 
-        [StringLength(50)]
+        [MaxLength]
         public string? LastName { get; set; }
 
         [ForeignKey("Employee")]

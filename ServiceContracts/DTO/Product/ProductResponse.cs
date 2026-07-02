@@ -10,7 +10,7 @@ namespace InventoryApp.ServiceContracts.DTO
         public string? ProductName { get; set; }
         public ProductCategory? ProductCategory { get; set; }
         public List<InventoryTransactions>? Transactions { get; set; }
-        public int? Quantity { get; set; }
+        public int Quantity { get; set; }
 
         public override bool Equals(object? obj)
         {
@@ -20,8 +20,8 @@ namespace InventoryApp.ServiceContracts.DTO
             ProductResponse product = (ProductResponse)obj;
             return ProductID == product.ProductID &&
              ProductName == product.ProductName &&
-             ProductCategory == product.ProductCategory &&
-             Transactions == product.Transactions;
+             ProductCategory == product.ProductCategory ;
+            //  Transactions == product.Transactions;
         }
 
         public override int GetHashCode()
@@ -36,8 +36,7 @@ namespace InventoryApp.ServiceContracts.DTO
                 ProductID = ProductID,
                 ProductName = ProductName,
                 Category = ProductCategory,
-                Transactions = Transactions
-                // Quantity = Quantity
+                // Transactions = Transactions
             };
         }
 

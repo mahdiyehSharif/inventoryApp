@@ -7,12 +7,13 @@ namespace Entities;
 public class AppEmployee
 {
     [Key]
+    //  [DatabaseGenerated(DatabaseGeneratedOption.None)]
     public int EmployeeID { get; set; }
 
-    [StringLength(50)]
+    [MaxLength]
     public string? FName { get; set; }
 
-    [StringLength(50)]
+    [MaxLength]
     public string? LName { get; set; }
 
     [ForeignKey("Job")]

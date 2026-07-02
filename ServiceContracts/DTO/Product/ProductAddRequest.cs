@@ -11,7 +11,6 @@ namespace InventoryApp.ServiceContracts.DTO
 
         [Required(ErrorMessage = "ProductCategory is required.")]
         public ProductCategory? Category {get; set; } 
-        public int? Quantity {get; set; }
 
 
         public AppProduct ToProduct()
@@ -19,7 +18,7 @@ namespace InventoryApp.ServiceContracts.DTO
             return new AppProduct()
         {
             ProductName = this?.ProductName,
-            Category = this?.Category
+            Category = this?.Category,
         };
         }
     }

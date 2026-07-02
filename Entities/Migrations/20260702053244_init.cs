@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Entities.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,8 +15,7 @@ namespace Entities.Migrations
                 name: "AppJob",
                 columns: table => new
                 {
-                    JobID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    JobID = table.Column<int>(type: "int", nullable: false),
                     JobName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     ManagementName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     DeputyName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -89,8 +88,7 @@ namespace Entities.Migrations
                 name: "AppEmployee",
                 columns: table => new
                 {
-                    EmployeeID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EmployeeID = table.Column<int>(type: "int", nullable: false),
                     FName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     LName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     JobID = table.Column<int>(type: "int", nullable: false)

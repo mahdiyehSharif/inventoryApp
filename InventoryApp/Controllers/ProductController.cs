@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using InventoryApp.ServiceContracts;
+using InventoryApp.ServiceContracts.DTO;
 
 
 namespace InventoryApp.Controllers
@@ -26,6 +27,22 @@ namespace InventoryApp.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("product/create")]
+        public async Task<IActionResult> Create(ProductAddRequest productAddRequest)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(productAddRequest);
+            }
+
+            ProductResponse productResponse =
+                await _productService.AddProduct(productAddRequest);
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

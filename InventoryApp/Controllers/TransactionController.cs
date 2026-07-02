@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using InventoryApp.ServiceContracts;
 using InventoryApp.ServiceContracts.DTO;
 using ServiceContracts.DTO;
+using System.Security.Claims;
 
 namespace InventoryApp.Controllers
 {
@@ -69,8 +70,10 @@ namespace InventoryApp.Controllers
                 await LoadDropdowns();
                 return View(request);
             }
+            var userId = Guid.Parse(
+                        User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            await _transactionService.AddTransaction(request);
+            await _transactionService.AddTransaction(request, userId);
 
             return RedirectToAction(nameof(Index));
         }

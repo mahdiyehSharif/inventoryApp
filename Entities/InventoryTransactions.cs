@@ -21,7 +21,7 @@ public class InventoryTransactions
     public int EmployeeID { get; set; }
     public AppEmployee? Employee { get; set; }
 
-    public TransactionType? Type { get; set; }
-    public int? Amount { get; set; }
-    public DateTime? DateTime { get; set; }
+    public TransactionType Type { get; set; }
+    public int Amount { get; set; }
+    public DateTime DateTime { get; set; }
 }

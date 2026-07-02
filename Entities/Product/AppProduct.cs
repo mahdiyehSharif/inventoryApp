@@ -8,13 +8,11 @@ public class AppProduct
     [Key]
     public Guid? ProductID { get; set; }
 
-    [StringLength(50)]
+    [MaxLength]
     public string? ProductName { get; set; }
 
-    [StringLength(50)]
+    [MaxLength]
     public ProductCategory? Category { get; set; }
-
-    public int Quantity {get; set; }
 
     public List<InventoryTransactions> Transactions { get; set; } = new List<InventoryTransactions>();
 
