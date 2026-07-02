@@ -14,7 +14,7 @@ namespace InventoryApp.ServiceContracts.DTO
         public int EmployeeID { get; set; }
 
         [Required(ErrorMessage = "Transaction type is required.")]
-        public TransactionType? Type { get; set; }
+        public TransactionType Type { get; set; }
 
         [Required(ErrorMessage = "Amount must be greater than 0")]
         public int Amount { get; set; }
@@ -24,10 +24,9 @@ namespace InventoryApp.ServiceContracts.DTO
             return new InventoryTransactions()
             {
                 ProductID = this?.ProductID,
-                UserID = this?.UserID,
                 EmployeeID = this.EmployeeID,
                 Type = this.Type,
-                Amount = this?.Amount
+                Amount = this.Amount
 
             };
         }

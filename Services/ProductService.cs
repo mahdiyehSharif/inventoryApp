@@ -5,6 +5,7 @@ using InventoryApp.ServiceContracts;
 using InventoryApp.Services.Helpers;
 using Entities.Data;
 using Microsoft.EntityFrameworkCore;
+using InventoryApp.Entities.Enums;
 
 namespace Services
 {
@@ -22,6 +23,22 @@ namespace Services
             ProductResponse productResponse = product.ToProductResponse();
             return productResponse;
 
+        }
+        private async Task<int> GetCurrentStock(Guid productId)
+        {
+            int stockIn = await _db.InventoryTransactions
+                .Where(t =>
+                    t.ProductID == productId &&
+                    t.Type == TransactionType.StockIn)
+                .SumAsync(t => t.Amount);
+
+            int stockOut = await _db.InventoryTransactions
+                .Where(t =>
+                    t.ProductID == productId &&
+                    t.Type == TransactionType.StockOut)
+                .SumAsync(t => t.Amount);
+
+            return stockIn - stockOut;
         }
 
 
@@ -51,9 +68,20 @@ namespace Services
 
         public async Task<List<ProductResponse>> GetAllProducts()
         {
-            return await _db.Products
-               .Select(p => p.ToProductResponse())
-               .ToListAsync();
+            List<AppProduct> products = await _db.Products.ToListAsync();
+
+            List<ProductResponse> responses = new();
+
+            foreach (AppProduct product in products)
+            {
+                ProductResponse response = product.ToProductResponse();
+
+                response.Quantity = await GetCurrentStock(product.ProductID!.Value);
+
+                responses.Add(response);
+            }
+
+            return responses;
         }
 
 
@@ -65,7 +93,12 @@ namespace Services
             if (product == null)
                 return null;
 
-            return product.ToProductResponse();
+            ProductResponse response = product.ToProductResponse();
+
+            response.Quantity =
+                await GetCurrentStock(product.ProductID!.Value);
+
+            return response;
         }
 
         public async Task<List<ProductResponse>> GetFilteredProducts(string searchBy, string searchString)

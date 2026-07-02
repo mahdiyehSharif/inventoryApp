@@ -19,11 +19,11 @@ namespace ServiceContracts.DTO
         public int EmployeeID { get; set; }
 
         [Required(ErrorMessage = "Please select transaction type.")]
-        public TransactionType? Type { get; set; }
+        public TransactionType Type { get; set; }
 
         [Required(ErrorMessage = "Amount must be greater than 0.")]
         [Range(1, int.MaxValue, ErrorMessage = "Amount must be greater than 0.")]
-        public int? Amount { get; set; }
+        public int Amount { get; set; }
 
         public InventoryTransactions ToTransaction()
         {

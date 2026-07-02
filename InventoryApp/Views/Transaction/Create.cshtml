@@ -1,5 +1,8 @@
 @model InventoryApp.ServiceContracts.DTO.TransactionAddRequest
 
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using InventoryApp.Entities.Enums
+
 @{
     ViewData["Title"] = "Create Transaction";
 }
@@ -27,28 +30,18 @@
                 <div class="mb-3">
 
                     <label asp-for="ProductID"
-                           class="form-label">
-                        Product
-                    </label>
+                           class="form-label"></label>
 
                     <select asp-for="ProductID"
+                            asp-items="ViewBag.Products"
                             class="form-select">
 
-                        <option value="">
-                            Select Product
-                        </option>
-
-                        @if(ViewBag.Products != null)
-                        {
-                            foreach(var product in ViewBag.Products)
-                            {
-                                <option value="@product.ProductID">
-                                    @product.ProductName
-                                </option>
-                            }
-                        }
+                        <option value="">-- Select Product --</option>
 
                     </select>
+
+                    <span asp-validation-for="ProductID"
+                          class="text-danger"></span>
 
                 </div>
 
@@ -57,28 +50,18 @@
                 <div class="mb-3">
 
                     <label asp-for="EmployeeID"
-                           class="form-label">
-                        Employee
-                    </label>
+                           class="form-label"></label>
 
                     <select asp-for="EmployeeID"
+                            asp-items="ViewBag.Employees"
                             class="form-select">
 
-                        <option value="">
-                            Select Employee
-                        </option>
-
-                        @if(ViewBag.Employees != null)
-                        {
-                            foreach(var employee in ViewBag.Employees)
-                            {
-                                <option value="@employee.EmployeeID">
-                                    @employee.EmployeeName
-                                </option>
-                            }
-                        }
+                        <option value="">-- Select Employee --</option>
 
                     </select>
+
+                    <span asp-validation-for="EmployeeID"
+                          class="text-danger"></span>
 
                 </div>
 
@@ -87,26 +70,25 @@
                 <div class="mb-3">
 
                     <label asp-for="Type"
-                           class="form-label">
-                        Transaction Type
-                    </label>
+                           class="form-label"></label>
 
                     <select asp-for="Type"
                             class="form-select">
 
-                        <option value="">
-                            Select Type
-                        </option>
+                        <option value="">-- Select Type --</option>
 
-                        <option value="In">
+                        <option value="@TransactionType.StockIn">
                             Stock In
                         </option>
 
-                        <option value="Out">
+                        <option value="@TransactionType.StockOut">
                             Stock Out
                         </option>
 
                     </select>
+
+                    <span asp-validation-for="Type"
+                          class="text-danger"></span>
 
                 </div>
 
@@ -115,16 +97,13 @@
                 <div class="mb-3">
 
                     <label asp-for="Amount"
-                           class="form-label">
-                        Amount
-                    </label>
+                           class="form-label"></label>
 
                     <input asp-for="Amount"
                            class="form-control" />
 
                     <span asp-validation-for="Amount"
-                          class="text-danger">
-                    </span>
+                          class="text-danger"></span>
 
                 </div>
 

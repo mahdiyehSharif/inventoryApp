@@ -23,16 +23,16 @@ namespace Services
             return transaction.ToTransactionResponse();
         }
 
-        private async Task<AppProduct> GetProductAsync(Guid? productId)
-        {
-            var product = await _db.Products
-                .FirstOrDefaultAsync(p => p.ProductID == productId);
+        // private async Task<AppProduct> GetProductAsync(Guid? productId)
+        // {
+        //     var product = await _db.Products
+        //         .FirstOrDefaultAsync(p => p.ProductID == productId);
 
-            if (product == null)
-                throw new Exception("Product not found.");
+        //     if (product == null)
+        //         throw new Exception("Product not found.");
 
-            return product;
-        }
+        //     return product;
+        // }
         private async Task ValidateTransactionRulesAsync(TransactionAddRequest request)
         {
 
@@ -83,9 +83,9 @@ namespace Services
                     t.ProductID == request.ProductID &&
                     t.Type == TransactionType.StockOut &&
                     t.DateTime >= fromDate)
-                .SumAsync(t => t.Amount ?? 0);
+                .SumAsync(t => t.Amount);
 
-            int requestedQuantity = request.Amount ?? 0;
+            int requestedQuantity = request.Amount;
 
             if (usedQuantity + requestedQuantity > limit.MaxQuantity)
             {
@@ -97,67 +97,63 @@ namespace Services
 
         private async Task ApplyTransactionAsync(InventoryTransactions transaction)
         {
-            var product = await _db.Products
-                .FirstOrDefaultAsync(p => p.ProductID == transaction.ProductID);
+            if (transaction.Type != TransactionType.StockIn &&
+                transaction.Type != TransactionType.StockOut)
+            {
+                throw new Exception("Invalid transaction type.");
+            }
+            bool productExists = await _db.Products
+                .AnyAsync(p => p.ProductID == transaction.ProductID);
 
-            if (product == null)
+            if (!productExists)
                 throw new Exception("Product not found.");
 
-            if (transaction.Amount == null || transaction.Amount <= 0)
-                throw new Exception("Invalid amount.");
+            if (transaction.Amount <= 0)
+                throw new Exception("Amount must be greater than zero.");
 
-            switch (transaction.Type)
+            if (transaction.Type == TransactionType.StockOut)
             {
-                case TransactionType.StockIn:
+                int stock = await GetCurrentStock(transaction.ProductID!.Value);
 
-                    product.Quantity += transaction.Amount.Value;
-                    break;
-
-                case TransactionType.StockOut:
-
-                    if (product.Quantity < transaction.Amount.Value)
-                        throw new Exception("Insufficient stock.");
-
-                    product.Quantity -= transaction.Amount.Value;
-                    break;
-
-                default:
-                    throw new Exception("Invalid transaction type.");
+                if (stock < transaction.Amount)
+                    throw new Exception("Insufficient stock.");
             }
         }
 
-        private async Task RollbackTransactionAsync(InventoryTransactions transaction)
-        {
-            var product = await _db.Products
-                .FirstOrDefaultAsync(p => p.ProductID == transaction.ProductID);
+        // private async Task RollbackTransactionAsync(InventoryTransactions transaction)
+        // {
+        //     var product = await _db.Products
+        //         .FirstOrDefaultAsync(p => p.ProductID == transaction.ProductID);
 
-            if (product == null)
-                throw new Exception("Product not found.");
+        //     if (product == null)
+        //         throw new Exception("Product not found.");
 
-            if (transaction.Amount == null || transaction.Amount <= 0)
-                throw new Exception("Invalid amount.");
+        //     if (transaction.Amount == null || transaction.Amount <= 0)
+        //         throw new Exception("Invalid amount.");
 
-            switch (transaction.Type)
-            {
-                case TransactionType.StockIn:
+        //     switch (transaction.Type)
+        //     {
+        //         case TransactionType.StockIn:
 
-                    if (product.Quantity < transaction.Amount.Value)
-                        throw new Exception("Cannot rollback transaction.");
+        //             if (product.Quantity < transaction.Amount.Value)
+        //                 throw new Exception("Cannot rollback transaction.");
 
-                    product.Quantity -= transaction.Amount.Value;
-                    break;
+        //             product.Quantity -= transaction.Amount.Value;
+        //             break;
 
-                case TransactionType.StockOut:
+        //         case TransactionType.StockOut:
 
-                    product.Quantity += transaction.Amount.Value;
-                    break;
+        //             product.Quantity += transaction.Amount.Value;
+        //             break;
 
-                default:
-                    throw new Exception("Invalid transaction type.");
-            }
-        }
+        //         default:
+        //             throw new Exception("Invalid transaction type.");
+        //     }
+        // }
 
-        public async Task<TransactionResponse> AddTransaction(TransactionAddRequest request)
+        public async Task<TransactionResponse> AddTransaction(
+                                                TransactionAddRequest request,
+                                                Guid userId)
         {
             if (request == null)
                 throw new ArgumentNullException(nameof(request));
@@ -167,13 +163,14 @@ namespace Services
             InventoryTransactions transaction = request.ToTransaction();
 
             transaction.TransactionID = Guid.NewGuid();
+            transaction.UserID = userId;
             transaction.DateTime = DateTime.Now;
+
+            await ValidateTransactionRulesAsync(request);
 
             await ApplyTransactionAsync(transaction);
 
             _db.InventoryTransactions.Add(transaction);
-
-            await ValidateTransactionRulesAsync(request);
 
             await _db.SaveChangesAsync();
 
@@ -225,10 +222,8 @@ namespace Services
             if (transaction == null)
                 return null;
 
-            await RollbackTransactionAsync(transaction);
-
             transaction.ProductID = request.ProductID;
-            transaction.UserID = request.UserID;
+            // transaction.UserID = request.UserID;
             transaction.EmployeeID = request.EmployeeID;
             transaction.Type = request.Type;
             transaction.Amount = request.Amount;
@@ -255,14 +250,28 @@ namespace Services
             if (transaction == null)
                 return false;
 
-
-            await RollbackTransactionAsync(transaction);
-
             _db.InventoryTransactions.Remove(transaction);
 
             await _db.SaveChangesAsync();
 
             return true;
+        }
+
+        private async Task<int> GetCurrentStock(Guid productId)
+        {
+            int stockIn = await _db.InventoryTransactions
+                .Where(t =>
+                    t.ProductID == productId &&
+                    t.Type == TransactionType.StockIn)
+                .SumAsync(t => t.Amount);
+
+            int stockOut = await _db.InventoryTransactions
+                .Where(t =>
+                    t.ProductID == productId &&
+                    t.Type == TransactionType.StockOut)
+                .SumAsync(t => t.Amount);
+
+            return stockIn - stockOut;
         }
     }
 }

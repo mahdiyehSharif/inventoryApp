@@ -56,7 +56,7 @@
                                 </td>
 
                                 <td>
-                                    @if (transaction.Type?.ToString() == "In")
+                                    @if (transaction.Type.ToString() == "In")
                                     {
                                         <span class="badge bg-success">
                                             IN
@@ -75,7 +75,7 @@
                                 </td>
 
                                 <td>
-                                    @(transaction.Date?.ToString("yyyy-MM-dd") ?? "-")
+                                    @(transaction.Date.ToString("yyyy-MM-dd") ?? "-")
                                 </td>
 
                             </tr>

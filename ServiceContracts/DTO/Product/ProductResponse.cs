@@ -20,6 +20,7 @@ namespace InventoryApp.ServiceContracts.DTO
             ProductResponse product = (ProductResponse)obj;
             return ProductID == product.ProductID &&
              ProductName == product.ProductName &&
+             Quantity == product.Quantity &&
              ProductCategory == product.ProductCategory ;
             //  Transactions == product.Transactions;
         }
@@ -35,8 +36,7 @@ namespace InventoryApp.ServiceContracts.DTO
             {
                 ProductID = ProductID,
                 ProductName = ProductName,
-                Category = ProductCategory,
-                // Transactions = Transactions
+                Category = ProductCategory
             };
         }
 
@@ -44,7 +44,7 @@ namespace InventoryApp.ServiceContracts.DTO
 
     public static class ProductExtensions
     {
-        public static ProductResponse ToProductResponse(this AppProduct? product)
+        public static ProductResponse ToProductResponse(this AppProduct product)
         {
             return new ProductResponse()
             {

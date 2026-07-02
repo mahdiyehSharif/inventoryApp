@@ -15,6 +15,8 @@ namespace InventoryApp.ServiceContracts.DTO
         [Required(ErrorMessage = "ProductCategory is required.")]
         public ProductCategory? Category {get; set; } 
 
+        public int Quantity { get; set; }
+
         // [Required(ErrorMessage = "Transaction Type is required.")]
         // public List<InventoryTransactions>? Transactions {get; set; }
 

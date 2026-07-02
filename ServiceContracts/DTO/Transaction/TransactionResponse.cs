@@ -12,9 +12,9 @@ namespace InventoryApp.ServiceContracts.DTO
         public Guid? UserID { get; set; }
         public int EmployeeID { get; set; }
         public string? EmployeeName { get; set; }
-        public TransactionType? Type { get; set; }
-        public int? Amount { get; set; }
-        public DateTime? Date { get; set; }
+        public TransactionType Type { get; set; }
+        public int Amount { get; set; }
+        public DateTime Date { get; set; }
 
 
         public override bool Equals(object? obj)
